@@ -93,6 +93,7 @@ function convertData (data) {
 
   var row = {
     ident: data.Sted.Id,
+    ident_int: parseInt(data.Sted.Id),
     name: data.Sted._,
     type: data.Sted.Type,
     areatype: parseStedType(data.Sted.Type),

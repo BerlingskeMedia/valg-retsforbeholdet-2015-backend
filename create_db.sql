@@ -4,6 +4,7 @@ USE `retsforbeholdet_2015`;
 
 CREATE TABLE IF NOT EXISTS `locations` (
     `ident` VARCHAR(10) NOT NULL,
+    `ident_int` MEDIUMINT,
     `name` VARCHAR(255) NOT NULL,
     `areatype` VARCHAR(1) NOT NULL,
     `type` VARCHAR(25) NOT NULL,
