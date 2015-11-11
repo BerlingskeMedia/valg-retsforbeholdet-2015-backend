@@ -1,0 +1,31 @@
+{
+  "name": "valg-retsforbeholdet-2015-backend",
+  "version": "1.0.0",
+  "description": "Valg til retsforbeholdet 2015",
+  "main": "api/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "docker build -t berlingskemedia/$npm_package_name:$npm_package_version . && docker tag -f berlingskemedia/$npm_package_name:$npm_package_version berlingskemedia/$npm_package_name:latest",
+    "push": "docker push berlingskemedia/$npm_package_name:$npm_package_version && docker push berlingskemedia/$npm_package_name:latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BerlingskeMedia/valg-retsforbeholdet-2015-backend.git"
+  },
+  "author": "Daniel Kokott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BerlingskeMedia/valg-retsforbeholdet-2015-backend/issues"
+  },
+  "homepage": "https://github.com/BerlingskeMedia/valg-retsforbeholdet-2015-backend#readme",
+  "dependencies": {
+    "hapi": "^11.1.0",
+    "inert": "^3.2.0",
+    "mysql": "^2.9.0",
+    "xml2js": "^0.4.15"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.12.0"
+  }
+}

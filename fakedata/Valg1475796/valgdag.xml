@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <SenestDannet>26-05-2014 09:54:07</SenestDannet>
+  <Landsdele>
+    <Landsdel SenestRettet="26-05-2014 02:04:22" landsdel_id="7" land_id="0" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_7.xml">Hovedstaden</Landsdel>
+    <Landsdel SenestRettet="26-05-2014 00:49:02" landsdel_id="8" land_id="0" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_8.xml">Sjælland-Syddanmark</Landsdel>
+    <Landsdel SenestRettet="26-05-2014 00:43:41" landsdel_id="9" land_id="0" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_9.xml">Midtjylland-Nordjylland</Landsdel>
+  </Landsdele>
+  <Storkredse>
+    <Storkreds SenestRettet="26-05-2014 02:04:22" storkreds_id="10" landsdel_id="7" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_10.xml">Københavns Storkreds</Storkreds>
+    <Storkreds SenestRettet="26-05-2014 00:21:09" storkreds_id="11" landsdel_id="7" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_11.xml">Københavns Omegns Storkreds</Storkreds>
+    <Storkreds SenestRettet="25-05-2014 23:25:52" storkreds_id="12" landsdel_id="7" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_12.xml">Nordsjællands Storkreds</Storkreds>
+    <Storkreds SenestRettet="25-05-2014 22:34:16" storkreds_id="13" landsdel_id="7" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_13.xml">Bornholms Storkreds</Storkreds>
+    <Storkreds SenestRettet="26-05-2014 00:49:02" storkreds_id="14" landsdel_id="8" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_14.xml">Sjællands Storkreds</Storkreds>
+    <Storkreds SenestRettet="26-05-2014 00:45:26" storkreds_id="15" landsdel_id="8" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_15.xml">Fyns Storkreds</Storkreds>
+    <Storkreds SenestRettet="25-05-2014 23:47:14" storkreds_id="16" landsdel_id="8" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_16.xml">Sydjyllands Storkreds</Storkreds>
+    <Storkreds SenestRettet="26-05-2014 00:43:41" storkreds_id="17" landsdel_id="9" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_17.xml">Østjyllands Storkreds</Storkreds>
+    <Storkreds SenestRettet="25-05-2014 23:37:48" storkreds_id="18" landsdel_id="9" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_18.xml">Vestjyllands Storkreds</Storkreds>
+    <Storkreds SenestRettet="26-05-2014 00:05:32" storkreds_id="19" landsdel_id="9" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_19.xml">Nordjyllands Storkreds</Storkreds>
+  </Storkredse>
+  <Opstillingskredse>
+    <Opstillingskreds SenestRettet="26-05-2014 01:15:10" opstillingskreds_id="20" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_20.xml">1. Østerbro</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:06:06" opstillingskreds_id="21" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_21.xml">2. Sundbyvester</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:22:06" opstillingskreds_id="22" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_22.xml">3. Indre By</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 02:04:22" opstillingskreds_id="23" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_23.xml">4. Sundbyøster</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:56:27" opstillingskreds_id="24" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_24.xml">5. Nørrebro</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 01:26:11" opstillingskreds_id="25" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_25.xml">6. Bispebjerg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:05:54" opstillingskreds_id="26" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_26.xml">7. Brønshøj</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:11:06" opstillingskreds_id="27" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_27.xml">8. Valby</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:23:46" opstillingskreds_id="28" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_28.xml">9. Vesterbro</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:37:47" opstillingskreds_id="29" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_29.xml">10. Falkoner</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:38:07" opstillingskreds_id="30" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_30.xml">11. Slots</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:35:03" opstillingskreds_id="31" storkreds_id="10" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_31.xml">12. Tårnby</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:25:15" opstillingskreds_id="32" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_32.xml">1. Gentofte</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:21:09" opstillingskreds_id="33" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_33.xml">2. Lyngby</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:44:21" opstillingskreds_id="34" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_34.xml">3. Gladsaxe</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:02:37" opstillingskreds_id="35" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_35.xml">4. Rødovre</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:10:51" opstillingskreds_id="36" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_36.xml">5. Hvidovre</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:37:52" opstillingskreds_id="37" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_37.xml">6. Brøndby</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:19:30" opstillingskreds_id="38" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_38.xml">7. Taastrup</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:20:50" opstillingskreds_id="39" storkreds_id="11" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_39.xml">8. Ballerup</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:21:53" opstillingskreds_id="40" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_40.xml">1. Helsingør</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:24:17" opstillingskreds_id="41" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_41.xml">2. Fredensborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:24:50" opstillingskreds_id="42" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_42.xml">3. Hillerød</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:25:52" opstillingskreds_id="43" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_43.xml">4. Frederikssund</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:50:36" opstillingskreds_id="44" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_44.xml">5. Egedal</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:06:17" opstillingskreds_id="45" storkreds_id="12" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_45.xml">6. Rudersdal</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:34:16" opstillingskreds_id="46" storkreds_id="13" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_46.xml">1. Rønne</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:26:52" opstillingskreds_id="47" storkreds_id="13" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_47.xml">2. Aakirkeby</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:31:44" opstillingskreds_id="48" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_48.xml">1. Lolland</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:23:46" opstillingskreds_id="49" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_49.xml">2. Guldborgsund</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:41:57" opstillingskreds_id="50" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_50.xml">3. Vordingborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:25:37" opstillingskreds_id="51" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_51.xml">4. Næstved</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:41:17" opstillingskreds_id="52" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_52.xml">5. Faxe</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:47:17" opstillingskreds_id="53" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_53.xml">6. Køge</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:49:02" opstillingskreds_id="54" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_54.xml">7. Greve</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:44:52" opstillingskreds_id="55" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_55.xml">8. Roskilde</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:11:36" opstillingskreds_id="56" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_56.xml">9. Holbæk</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:50:05" opstillingskreds_id="57" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_57.xml">10. Kalundborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:59:13" opstillingskreds_id="58" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_58.xml">11. Ringsted</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:27:29" opstillingskreds_id="59" storkreds_id="14" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_59.xml">12. Slagelse</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:39:09" opstillingskreds_id="60" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_60.xml">1. Odense Øst</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:39:39" opstillingskreds_id="61" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_61.xml">2. Odense Vest</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:35:54" opstillingskreds_id="62" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_62.xml">3. Odense Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:56:55" opstillingskreds_id="63" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_63.xml">4. Assens</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:45:26" opstillingskreds_id="64" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_64.xml">5. Middelfart</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:26:09" opstillingskreds_id="65" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_65.xml">6. Nyborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:39:14" opstillingskreds_id="66" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_66.xml">7. Svendborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:50:30" opstillingskreds_id="67" storkreds_id="15" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_67.xml">8. Faaborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:06:58" opstillingskreds_id="68" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_68.xml">1. Sønderborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:13:13" opstillingskreds_id="69" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_69.xml">2. Aabenraa</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:33:39" opstillingskreds_id="70" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_70.xml">3. Tønder</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:23:15" opstillingskreds_id="71" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_71.xml">4. Esbjerg By</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:37:15" opstillingskreds_id="72" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_72.xml">5. Esbjerg Omegn</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:49:38" opstillingskreds_id="73" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_73.xml">6. Varde</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:25:41" opstillingskreds_id="74" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_74.xml">7. Vejen</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:47:14" opstillingskreds_id="75" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_75.xml">8. Vejle Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:44:52" opstillingskreds_id="76" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_76.xml">9. Vejle Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:13:42" opstillingskreds_id="77" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_77.xml">10. Fredericia</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:40:18" opstillingskreds_id="78" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_78.xml">11. Kolding Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:43:29" opstillingskreds_id="79" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_79.xml">12. Kolding Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:43:13" opstillingskreds_id="80" storkreds_id="16" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_80.xml">13. Haderslev</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:35:11" opstillingskreds_id="81" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_81.xml">1. Århus Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:23:51" opstillingskreds_id="82" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_82.xml">2. Århus Vest</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:59:07" opstillingskreds_id="83" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_83.xml">3. Århus Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:22:44" opstillingskreds_id="84" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_84.xml">4. Århus Øst</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:43:56" opstillingskreds_id="85" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_85.xml">5. Djurs</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:21:48" opstillingskreds_id="86" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_86.xml">6. Randers Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:22:17" opstillingskreds_id="87" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_87.xml">7. Randers Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:45:46" opstillingskreds_id="88" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_88.xml">8. Favrskov</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:45:38" opstillingskreds_id="89" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_89.xml">9. Skanderborg</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:43:41" opstillingskreds_id="90" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_90.xml">10. Horsens</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:01:14" opstillingskreds_id="91" storkreds_id="17" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_91.xml">11. Hedensted</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:23:47" opstillingskreds_id="92" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_92.xml">1. Struer</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:07:58" opstillingskreds_id="93" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_93.xml">2. Skive</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:24:29" opstillingskreds_id="94" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_94.xml">3. Viborg Vest</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:30:34" opstillingskreds_id="95" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_95.xml">4. Viborg Øst</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:50:39" opstillingskreds_id="96" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_96.xml">5. Silkeborg Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:24:04" opstillingskreds_id="97" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_97.xml">6. Silkeborg Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:37:48" opstillingskreds_id="98" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_98.xml">7. Ikast</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:39:53" opstillingskreds_id="99" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_99.xml">8. Herning Syd</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:08:53" opstillingskreds_id="100" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_100.xml">9. Herning Nord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:58:42" opstillingskreds_id="101" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_101.xml">10. Holstebro</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:36:43" opstillingskreds_id="102" storkreds_id="18" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_102.xml">11. Ringkøbing</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:57:56" opstillingskreds_id="103" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_103.xml">1. Frederikshavn</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:51:20" opstillingskreds_id="104" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_104.xml">2. Hjørring</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:23:28" opstillingskreds_id="105" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_105.xml">3. Brønderslev</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 22:03:28" opstillingskreds_id="106" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_106.xml">4. Thisted</Opstillingskreds>
+    <Opstillingskreds SenestRettet="26-05-2014 00:05:32" opstillingskreds_id="107" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_107.xml">5. Himmerland</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 21:39:09" opstillingskreds_id="108" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_108.xml">6. Mariagerfjord</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:01:18" opstillingskreds_id="109" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_109.xml">7. Aalborg Øst</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:24:24" opstillingskreds_id="110" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_110.xml">8. Aalborg Vest</Opstillingskreds>
+    <Opstillingskreds SenestRettet="25-05-2014 23:08:38" opstillingskreds_id="111" storkreds_id="19" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_111.xml">9. Aalborg Nord</Opstillingskreds>
+  </Opstillingskredse>
+  <Afstemningsomraader />
+  <Land SenestRettet="26-05-2014 02:04:22" land_id="0" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_0.xml">Hele landet</Land>
+  <Land SenestRettet="26-05-2014 02:04:22" filnavn="http://www.dst.dk/valg/Valg1475796/xml/valgdag_999.xml">Alle indberettede opstillingskredse</Land>
+  <SenestRettet>26-05-2014 02:04:22</SenestRettet>
+</Data>

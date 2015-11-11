@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="8" Type="Landsdel">Sjælland-Syddanmark</Sted>
+  <SenestRettet>26-05-2014 00:49:02</SenestRettet>
+  <SenestDannet>26-05-2014 09:54:01</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgLand8.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg8.png</GrafUrl>
+  <Status Kode="1">Foreløbigt resultat</Status>
+  <Stemmeberettigede>1506975</Stemmeberettigede>
+  <DeltagelsePct>55.34</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="501445" StemmerPct="62.3" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="303468" StemmerPct="37.7" />
+    <IAltGyldigeStemmer>804913</IAltGyldigeStemmer>
+    <BlankeStemmer>26679</BlankeStemmer>
+    <AndreUgyldigeStemmer>2419</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>29098</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>834011</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

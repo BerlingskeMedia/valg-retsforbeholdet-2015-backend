@@ -1,0 +1,82 @@
+{
+  "ident": "10",
+  "name": "Nordjyllands Storkreds",
+  "areatype": "S",
+  "path": "/storkreds/10",
+  "votes_allowed": 31439,
+  "votes_made": 25950,
+  "votes_pct": 83.5,
+  "status_code": 1,
+  "status_text": "Foreløbigt resultat",
+  "updated_at": "2015-06-19 21:36:29",
+  "results": {
+    "JA": {
+      "name": "JA",
+      "votes": 14257,
+      "votes_pct": 64.3
+    },
+    "NEJ": {
+      "name": "NEJ",
+      "votes": 7906,
+      "votes_pct": 35.7
+    }
+  },
+  "locations_completed": 2,
+  "locations_total": 2,
+  "locations": [
+    {
+      "ident": "K92",
+      "name": "Aalborg Nord",
+      "path": "/kreds/20",
+      "updated_at": "2015-06-19 17:54:46",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "K91",
+      "name": "Aalborg Vest",
+      "path": "/kreds/20",
+      "updated_at": "2015-06-19 17:52:22",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    }
+  ],
+  "hierarchy": [
+    {
+      "ident": "L1",
+      "name": "Hele landet",
+      "areatype": "L",
+      "path": "/landet"
+    },
+    {
+      "ident": "S10",
+      "name": "Nordjyllands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10"
+    }
+  ]
+}

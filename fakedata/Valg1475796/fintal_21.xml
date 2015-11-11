@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="21" Type="OpstKreds">2. Sundbyvester</Sted>
+  <SenestRettet>27-05-2014 15:45:55</SenestRettet>
+  <SenestDannet>12-06-2014 09:02:48</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgOpst21.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg21.png</GrafUrl>
+  <Status Kode="12">Fintællingsresultat</Status>
+  <Stemmeberettigede>43454</Stemmeberettigede>
+  <DeltagelsePct>53.44</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="12966" StemmerPct="58.1" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="9346" StemmerPct="41.9" />
+    <IAltGyldigeStemmer>22312</IAltGyldigeStemmer>
+    <BlankeStemmer>825</BlankeStemmer>
+    <AndreUgyldigeStemmer>84</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>909</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>23221</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

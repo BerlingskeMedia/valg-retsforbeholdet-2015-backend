@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="7" Type="Landsdel">Hovedstaden</Sted>
+  <SenestRettet>26-05-2014 02:04:22</SenestRettet>
+  <SenestDannet>26-05-2014 09:54:01</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgLand7.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg7.png</GrafUrl>
+  <Status Kode="1">Foreløbigt resultat</Status>
+  <Stemmeberettigede>1238252</Stemmeberettigede>
+  <DeltagelsePct>58.34</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="434886" StemmerPct="62.4" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="262549" StemmerPct="37.6" />
+    <IAltGyldigeStemmer>697435</IAltGyldigeStemmer>
+    <BlankeStemmer>22786</BlankeStemmer>
+    <AndreUgyldigeStemmer>2176</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>24962</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>722397</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

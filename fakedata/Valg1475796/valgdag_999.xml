@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="" Type="Optalling">Foreløbig opgørelse af valgresultat</Sted>
+  <SenestRettet>26-05-2014 02:04:22</SenestRettet>
+  <SenestDannet>26-05-2014 09:54:00</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgOpstTot.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg.png</GrafUrl>
+  <Status Kode="1">Foreløbigt resultat (92 af 92 opstillingskredse optalt)</Status>
+  <Stemmeberettigede>4124708</Stemmeberettigede>
+  <DeltagelsePct>55.84</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="1388561" StemmerPct="62.6" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="831229" StemmerPct="37.4" />
+    <IAltGyldigeStemmer>2219790</IAltGyldigeStemmer>
+    <BlankeStemmer>77128</BlankeStemmer>
+    <AndreUgyldigeStemmer>6260</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>83388</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>2303178</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

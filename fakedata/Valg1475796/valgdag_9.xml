@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="9" Type="Landsdel">Midtjylland-Nordjylland</Sted>
+  <SenestRettet>26-05-2014 00:43:41</SenestRettet>
+  <SenestDannet>26-05-2014 09:54:01</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgLand9.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg9.png</GrafUrl>
+  <Status Kode="1">Foreløbigt resultat</Status>
+  <Stemmeberettigede>1379481</Stemmeberettigede>
+  <DeltagelsePct>54.13</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="452230" StemmerPct="63" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="265212" StemmerPct="37" />
+    <IAltGyldigeStemmer>717442</IAltGyldigeStemmer>
+    <BlankeStemmer>27663</BlankeStemmer>
+    <AndreUgyldigeStemmer>1665</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>29328</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>746770</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

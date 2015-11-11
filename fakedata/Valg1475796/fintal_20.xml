@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="20" Type="OpstKreds">1. Østerbro</Sted>
+  <SenestRettet>27-05-2014 15:46:37</SenestRettet>
+  <SenestDannet>12-06-2014 09:02:47</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgOpst20.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg20.png</GrafUrl>
+  <Status Kode="12">Fintællingsresultat</Status>
+  <Stemmeberettigede>53297</Stemmeberettigede>
+  <DeltagelsePct>59.81</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="19559" StemmerPct="63.9" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="11064" StemmerPct="36.1" />
+    <IAltGyldigeStemmer>30623</IAltGyldigeStemmer>
+    <BlankeStemmer>1154</BlankeStemmer>
+    <AndreUgyldigeStemmer>101</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>1255</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>31878</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>

@@ -1,0 +1,15 @@
+{
+  "result_time": "26-05-2014 02:04:22",
+  "results": {
+    "JA": {
+      "name": "JA",
+      "votes": 1388561,
+      "votes_pct": 62.5
+    },
+    "NEJ": {
+      "name": "NEJ",
+      "votes": 831229,
+      "votes_pct": 37.4
+    }
+  }
+}

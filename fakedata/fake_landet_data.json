@@ -1,0 +1,234 @@
+{
+  "ident": "0",
+  "name": "Hele landet",
+  "path": "/landet",
+  "updated_at": "2015-06-19 17:54:46",
+  "status_code": 1,
+  "status_text": "Foreløbigt resultat",
+  "results": {
+    "JA": {
+      "name": "JA",
+      "votes": 14257,
+      "votes_pct": 64.3
+    },
+    "NEJ": {
+      "name": "NEJ",
+      "votes": 7906,
+      "votes_pct": 35.7
+    }
+  },
+  "result_time": "26-05-2014 02:04:22",
+  "locations":
+  [
+    {
+      "ident": "S4",
+      "name": "Bornholms Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S6",
+      "name": "Fyns Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S2",
+      "name": "Københavns Omegns Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S1",
+      "name": "Københavns Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S10",
+      "name": "Nordjyllands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S3",
+      "name": "Nordsjællands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S5",
+      "name": "Sjællands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S7",
+      "name": "Sydjyllands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S9",
+      "name": "Vestjyllands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    },
+    {
+      "ident": "S8",
+      "name": "Østjyllands Storkreds",
+      "areatype": "S",
+      "path": "/storkreds/10",
+      "status_code": 1,
+      "status_text": "Foreløbigt resultat",
+      "updated_at": "2015-06-19 21:36:29",
+      "results": {
+        "JA": {
+          "name": "JA",
+          "votes": 14257,
+          "votes_pct": 64.3
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": 7906,
+          "votes_pct": 35.7
+        }
+      }
+    }
+  ]
+}

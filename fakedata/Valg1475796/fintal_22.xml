@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Data>
+  <ValgNavn>Folkeafstemning søndag  25. maj 2014</ValgNavn>
+  <ValgDato>25-05-2014</ValgDato>
+  <Sted Id="22" Type="OpstKreds">3. Indre By</Sted>
+  <SenestRettet>27-05-2014 15:44:13</SenestRettet>
+  <SenestDannet>12-06-2014 09:02:48</SenestDannet>
+  <HtmlUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopgOpst22.htm</HtmlUrl>
+  <GrafUrl>http://www.dst.dk/valg/Valg1475796/valgopg/valgopg22.png</GrafUrl>
+  <Status Kode="12">Fintællingsresultat</Status>
+  <Stemmeberettigede>39538</Stemmeberettigede>
+  <DeltagelsePct>58.47</DeltagelsePct>
+  <Stemmer>
+    <Parti Id="434284" Bogstav="JA" Navn="JA" StemmerAntal="14510" StemmerPct="65.5" />
+    <Parti Id="434285" Bogstav="NEJ" Navn="NEJ" StemmerAntal="7658" StemmerPct="34.5" />
+    <IAltGyldigeStemmer>22168</IAltGyldigeStemmer>
+    <BlankeStemmer>836</BlankeStemmer>
+    <AndreUgyldigeStemmer>113</AndreUgyldigeStemmer>
+    <IAltUgyldigeStemmer>949</IAltUgyldigeStemmer>
+    <IAltAfgivneStemmer>23117</IAltAfgivneStemmer>
+  </Stemmer>
+</Data>
