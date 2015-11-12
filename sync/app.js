@@ -91,6 +91,13 @@ function dbInsert (location, callback) {
 
 function convertData (data) {
 
+  // HeleLandet har ID=0.
+  // Men ID mangler når f.eks. kalder http://www.dst.dk/valg/Valg1475796/xml/fintal_0.xml
+  // Derfor sætter jeg ID manuelt på denne måde.
+  if (data.Sted.Id === '' && data.Sted.Type === 'HeleLandet') {
+    data.Sted.Id = '0';
+  }
+
   var row = {
     ident: data.Sted.Id,
     ident_int: parseInt(data.Sted.Id),
