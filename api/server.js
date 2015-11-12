@@ -4,7 +4,8 @@
 var Hapi = require('hapi'),
     inert = require('inert'),
     fakedata = require('./fakedata.js'),
-    map = require('./map.js');
+    map = require('./map.js'),
+    tables = require('./tables.js');
 
 var server = new Hapi.Server({
   connections: {
@@ -27,6 +28,7 @@ server.route({
 server.register(inert, cb);
 server.register(fakedata, { routes: { prefix: '/fake' } }, cb);
 server.register(map, cb);
+server.register(tables, cb);
 
 
 if (!module.parent) {
