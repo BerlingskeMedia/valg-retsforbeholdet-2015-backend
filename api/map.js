@@ -4,10 +4,6 @@
 var db = require('./db.js'),
     eventEmitter = require('events').EventEmitter;
 
-var red_block_party_letters = 'ABFØÅ'.split(''),
-    blue_block_party_letters = 'CIKOV'.split(''),
-    all_party_letters = red_block_party_letters.concat(blue_block_party_letters).map(escapePartyLetter).join(',');
-
 module.exports.register = function (server, options, next) {
 
   server.route({
@@ -36,75 +32,42 @@ module.exports.register.attributes = {
   version: '1.0.0'
 };
 
-module.exports.all_party_letters = all_party_letters  ;
 
 module.exports.votes_counted_pct = getCountryCompletion;
-module.exports.blocks = getCountryBlocks;
-module.exports.parties = getCountryParties;
 module.exports.constituency = getConstituencies;
 module.exports.latest_votes_counted_complete = getLatestCompletedConstituencies;
-
-function getCountryBlocks (callback) {
-  getBlocks('L1', callback);
-}
-
-function getBlocks (ident, callback) {
-  var data = {};
-
-  getBlockData(ident, blue_block_party_letters, function (err, result) {
-    if (err) return callback(err);
-
-    data.blue_block = result;
-
-    getBlockData(ident, red_block_party_letters, function (err, result) {
-      if (err) return callback(err);
-
-      data.red_block = result;
-
-      // var total = data.red_block.votes + data.blue_block.votes;
-      // data.red_block.votes_pct = Number.parseFloat(((data.red_block.votes / (total / 100)).toFixed(1)));
-      // data.blue_block.votes_pct = Number.parseFloat((data.blue_block.votes / (total / 100)).toFixed(1));
-
-      callback(null, data);
-    });
-  });
-}
-
-
-function getBlockData (ident, party_letters, callback) {
-  var sql = [
-    'SELECT SUM(votes) AS votes, SUM(votes_pct) AS votes_pct, SUM(mandates) AS mandates',
-    'FROM result',
-    'WHERE ident = ', db.escape(ident),
-    'AND party_letter IN (',
-      party_letters.map(escapePartyLetter).join(','),
-    ')'].join(' ');
-
-  db.queryOne(sql, function (err, result) {
-    if (result !== null) {
-      result.votes = result.votes !== null ? result.votes : 0;
-      result.votes_pct = result.votes_pct !== null ? result.votes_pct : 0;
-      result.mandates = result.mandates !== null ? result.mandates : 0;
-      result.party_letters = party_letters.join('').toLowerCase();
-    }
-
-    callback(err, result);
-  });
-}
 
 
 function getCountryCompletion (callback) {
   var sql = [
-    'SELECT votes_counted_pct',
-    'FROM location',
-    'WHERE ident = "L1"'].join(' ');
+    'SELECT status_code, status_text, votes_yes, votes_yes_pct, votes_no, votes_no_pct, updated_at',
+    'FROM locations',
+    'WHERE ident = "0"'].join(' ');
 
-  return db.queryOne(sql, callback);
-}
+  return db.queryOne(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
 
+    var data = {
+      result_time: result.updated_at,
+      results: {
+        "JA": {
+          "name": "JA",
+          "votes": result.votes_yes,
+          "votes_pct": result.votes_yes_pct
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": result.votes_no,
+          "votes_pct": result.votes_no_pct
+        }
+      }
+    };
 
-function escapePartyLetter (letter) {
-  return db.escape(letter);
+    callback(null, data);
+  });
 }
 
 
@@ -115,102 +78,57 @@ function getConstituencies (ident, callback) {
   }
 
   var sql = [
-    'SELECT ident, name, type, area_type AS areatype, CONCAT("/kreds/", ident) as path, votes_allowed, votes_made, votes_pct, votes_counted_pct, greater_const_ident',
-    'FROM location',
-    'WHERE area_type = "K"',
+    'SELECT ident, name, type, areatype, CONCAT("/kreds/", ident) AS path, parent_ident,',
+    'votes_allowed, votes_made, votes_pct,',
+    'votes_valid, votes_invalid_blank, votes_invalid_other, votes_invalid_other, votes_invalid_total,',
+    'votes_yes, votes_yes_pct,',
+    'votes_no, votes_no_pct,',
+    'status_code, status_text',
+    'FROM locations',
+    'WHERE areatype = "K"',
     ident !== null ? 'AND ident = ' + db.escape(ident) : ''].join(' ');
 
-  return db.query(sql, function (err, constituencies) {
-    if (err) return callback(err);
+  return db.query(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
 
-    var count = constituencies.length,
-        completed = 0;
-
-    constituencies.forEach(function (constituency, index) {
-
-      getConstituencyParties(constituency, function (err, parties) {
-        if (err) return callback(err);
-
-        if (++completed === count) {
-          if (ident !== null && constituencies.length === 1) {
-            callback(null, constituencies[0]);
-          } else {
-            callback(null, constituencies);
-          }
+    var constituencies = result.map(function (constituency) {
+      return {
+        ident: constituency.ident,
+        name: constituency.name,
+        type: constituency.type,
+        areatype: constituency.areatype,
+        path: constituency.path,
+        greater_const_ident: constituency.parent_ident,
+        votes_allowed: constituency.votes_allowed,
+        votes_made: constituency.votes_made,
+        votes_pct: constituency.votes_pct,
+        votes_valid: constituency.votes_valid,
+        votes_invalid_blank: constituency.votes_invalid_blank,
+        votes_invalid_other: constituency.votes_invalid_other,
+        votes_invalid_total: constituency.votes_invalid_total,
+        status_code: constituency.status_code,
+        status_text: constituency.status_text,
+        winner: constituency.votes_yes > constituency.votes_no ? 'JA' : 'NEJ',
+        results: {
+          "JA": {
+            "name": "JA",
+            "votes": constituency.votes_yes,
+            "votes_pct": constituency.votes_yes_pct
+          },
+          "NEJ": {
+            "name": "NEJ",
+            "votes": constituency.votes_no,
+            "votes_pct": constituency.votes_no_pct
+          },
         }
-      });
-    });
-  });
-}
-
-
-function getConstituencyParties (constituency, callback) {
-  getLocationParties(constituency.ident, function (err, parties) {
-    if (err) return callback(err);
-
-    var total_votes = 0;
-    constituency.red_block_votes = 0;
-    constituency.red_block_votes_pct = 0.0;
-    constituency.blue_block_votes = 0;
-    constituency.blue_block_votes_pct = 0.0;
-
-    // This is not the optimal way of calculating the blocks
-    parties.forEach(function (party) {
-
-      party.path = '/kreds/' + constituency.ident + '/' + party.party_letter;
-
-      total_votes = total_votes + party.votes;
-      if (red_block_party_letters.indexOf(party.party_letter.toUpperCase()) > -1) {
-        constituency.red_block_votes = constituency.red_block_votes + party.votes;
-        constituency.red_block_votes_pct = constituency.red_block_votes_pct + parseFloat(party.votes_pct); // XXX
-      } else {
-        constituency.blue_block_votes = constituency.blue_block_votes + party.votes;
-        constituency.blue_block_votes_pct = constituency.blue_block_votes_pct + parseFloat(party.votes_pct); // XXX
       }
     });
 
-    // constituency.red_block_votes_pct = Number.parseFloat(((constituency.red_block_votes / (total_votes / 100)).toFixed(1)));
-    // constituency.blue_block_votes_pct = Number.parseFloat((constituency.blue_block_votes / (total_votes / 100)).toFixed(1));
-
-    constituency.block_winner =
-      constituency.blue_block_votes > constituency.red_block_votes ? 'blue' :
-      constituency.blue_block_votes < constituency.red_block_votes ? 'red' : null;
-
-    // parties.forEach(function (party) {
-    //   party.votes_pct = Number.parseFloat((party.votes / (total_votes / 100)).toFixed(1));
-    // });
-
-    constituency.parties = parties;
-
-    callback(null, constituency);
+    callback(null, constituencies);
   });
-}
-
-
-function getCountryParties (callback) {
-  return getLocationParties('L1', function (err, result) {
-    if (err) return callback(err);
-
-    result.map(function (r) {
-      r.path = '/landet/' + r.party_letter;
-    });
-
-    callback(null, result);
-  });
-}
-
-
-function getLocationParties (ident, callback) {
-  var sql = [
-    'SELECT LOWER(party_letter) AS party_letter, party_name, votes, votes_pct, mandates, result_time',
-    'FROM result',
-    'WHERE ident = ' + db.escape(ident),
-    'AND party_letter IN (',
-      all_party_letters,
-    ')',
-    'ORDER BY party_letter'].join(' ');
-
-  return db.query(sql, callback);
 }
 
 
@@ -221,52 +139,51 @@ function getLatestCompletedConstituencies (ident, callback) {
   }
 
   var sql = [
-    'SELECT ident, name, CONCAT("/kreds/", ident) as path, updated_at',
-    'FROM location',
-    'WHERE area_type = "K"',
+    'SELECT ident, name, CONCAT("/kreds/", ident) as path, updated_at,',
+    'votes_yes, votes_no',
+    'FROM locations',
+    'WHERE areatype = "K"',
     ident !== null ? 'AND ident = ' + db.escape(ident) : '',
-    'AND votes_counted_pct = 100.0',
+    'AND status_code = 12',
     'ORDER BY updated_at DESC',
     'LIMIT 10'].join(' ');
 
-  return db.query(sql, function (err, constituencies) {
-    if (err) return callback(err);
-    if (constituencies.length === 0) {
+  return db.query(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    if (result.length === 0) {
       return callback(null, null);
     }
 
-    var count = constituencies.length,
-        completed = 0;
+    var constituencies = result.map(function (constituency) {
 
-    constituencies.forEach(function (constituency) {
-
-      getBlocks(constituency.ident, function (err, result) {
-        if (err) return callback(err);
-
-        constituency.red_block_votes = result.red_block.votes;
-        constituency.red_block_votes_pct = result.red_block.votes_pct;
-        constituency.blue_block_votes = result.blue_block.votes;
-        constituency.blue_block_votes_pct = result.blue_block.votes_pct;
-        constituency.block_winner =
-          constituency.blue_block_votes > constituency.red_block_votes ? 'blue' :
-          constituency.blue_block_votes < constituency.red_block_votes ? 'red' : null;
-
-        if (++completed === count) {
-          if (ident !== null && constituencies.length === 1) {
-            callback(null, constituencies[0]);
-          } else {
-            callback(null, constituencies);
-          }
-        }
-      });
+      constituency.winner = constituency.votes_yes > constituency.votes_no ? 'JA' : 'NEJ'
+      constituency.result = {
+        "JA": {
+          "name": "JA",
+          "votes": constituency.votes_yes,
+          "votes_pct": constituency.votes_yes_pct
+        },
+        "NEJ": {
+          "name": "NEJ",
+          "votes": constituency.votes_no,
+          "votes_pct": constituency.votes_no_pct
+        },
+      };
+      delete constituency.votes_yes;
+      delete constituency.votes_no;
+      return constituency;
     });
+
+    callback(null, constituencies);
   });
 }
 
 
 function getMapData (request, reply) {
 
-  var data = {};
   // var ee = new eventEmitter();
 
   // ee.on('newListener', function () {
@@ -277,66 +194,31 @@ function getMapData (request, reply) {
   //   console.log('removeListener')
   // });
 
-  getCountryCompletion(function (err, result) {
+  getCountryCompletion(function (err, data) {
     if (err) return reply().code(500);
-    if (result === null) return reply();
+    if (data === null) return reply();
 
-    data.votes_counted_pct = result.votes_counted_pct;
-
-    getCountryBlocks( function (err, blocks) {
+    getConstituencies(function (err, result) {
       if (err) return reply().code(500);
 
-      data.blue_block = blocks.blue_block;
-      data.red_block = blocks.red_block;
+      data.constituencies = result;
 
-      getCountryParties(function (err, result) {
+      getLatestCompletedConstituencies(function (err, result) {
         if (err) return reply().code(500);
 
-        data.parties = result;
+        data.latest_votes_counted_complete = result !== null ? result : [];
 
-        getConstituencies(function (err, result) {
-          if (err) return reply().code(500);
-
-          data.constituencies = result;
-
-          getLatestCompletedConstituencies(function (err, result) {
-            if (err) return reply().code(500);
-
-            data.latest_votes_counted_complete = result !== null ? result : [];
-
-            reply(data);
-          }); 
-        });
-      });
+        reply(data);
+      }); 
     });
   });
 }
 
 
 function getTeaserData (request, reply) {
-  var data = {};
-
-  getCountryBlocks( function (err, blocks) {
+  getCountryCompletion( function (err, data) {
     if (err) return reply().code(500);
 
-    data.blue_block = blocks.blue_block;
-    data.red_block = blocks.red_block;
-
-    getCountryParties(function (err, result) {
-      data.parties = result;
-
-      reply(data);
-    });
+    reply(data);
   });
-}
-
-
-function findByIdent(list, ident) {
-  for (var i = 0; i < list.length; i++) {
-    if (list[i].ident === ident) {
-      return list[i];
-    }
-  }
-
-  return null;
 }
