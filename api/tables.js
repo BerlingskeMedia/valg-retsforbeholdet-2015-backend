@@ -118,7 +118,7 @@ module.exports.queryLocations = queryLocations;
 
 
 function getCountry (callback) {
-  queryLocation('0', addSublocations('S', callback));
+  queryLocation('L', '0', addSublocations('S', callback));
   // queryLocation('0', function (err, result) {
   //   if (err) {
   //     console.log(err);
@@ -186,7 +186,7 @@ function addSublocations (areatype, ident, callback) {
 
   return function (err, location) {
     queryLocations(areatype, ident, function (err, locations) {
-      if (locations) {
+      if (location && locations) {
         location.locations_completed = 0;
         locations.forEach(function (loc) {
           if (loc.status_code === 12)
@@ -203,7 +203,7 @@ function addSublocations (areatype, ident, callback) {
 
 function getGreater (ident, callback) {
   if (ident) {
-    queryLocation(ident, addSublocations('K', ident, callback));
+    queryLocation('S', ident, addSublocations('K', ident, callback));
   } else {
     queryLocations('S', callback);
   }
@@ -276,7 +276,7 @@ function getGreater (ident, callback) {
 
 function getConst (ident, callback) {
   if (ident) {
-    queryLocation(ident, addSublocations('D', ident, callback));
+    queryLocation('K', ident, addSublocations('D', ident, callback));
   } else {
     queryLocations('K', callback);
   }
@@ -331,7 +331,7 @@ function getConst (ident, callback) {
 
 function getPolling (ident, callback) {
   if (ident) {
-    queryLocation(ident, callback);
+    queryLocation('D', ident, callback);
   } else {
     queryLocations('D', callback);
   }
@@ -478,7 +478,44 @@ function getLocationPartyCandidates (ident, party_letter, callback) {
 //   db.query(sql, callback);
 // }
 
-function queryLocation (ident, callback) {
+function objectifyLocation (location) {
+  if (location === null) {
+    return null;
+  }
+
+  return {
+    ident: location.ident,
+    name: location.name,
+    type: location.type,
+    areatype: location.areatype,
+    path: getPath(location.areatype, location.ident),
+    // greater_const_ident: location.parent_ident,
+    votes_allowed: location.votes_allowed,
+    votes_made: location.votes_made,
+    votes_pct: location.votes_pct,
+    votes_valid: location.votes_valid,
+    votes_invalid_blank: location.votes_invalid_blank,
+    votes_invalid_other: location.votes_invalid_other,
+    votes_invalid_total: location.votes_invalid_total,
+    status_code: location.status_code,
+    status_text: location.status_text,
+    winner: location.votes_yes > location.votes_no ? 'JA' : 'NEJ',
+    results: {
+      "JA": {
+        "name": "JA",
+        "votes": location.votes_yes,
+        "votes_pct": location.votes_yes_pct
+      },
+      "NEJ": {
+        "name": "NEJ",
+        "votes": location.votes_no,
+        "votes_pct": location.votes_no_pct
+      },
+    }
+  }
+}
+
+function queryLocation (areatype, ident, callback) {
   var sql = [
     'SELECT ident, name, type, areatype, parent_ident,',
     'votes_allowed, votes_made, votes_pct,',
@@ -487,7 +524,8 @@ function queryLocation (ident, callback) {
     'votes_no, votes_no_pct,',
     'status_code, status_text',
     'FROM locations',
-    'WHERE ident = ' + db.escape(ident)].join(' ');
+    'WHERE areatype = ' + db.escape(areatype),
+    'AND ident = ' + db.escape(ident)].join(' ');
 
   db.queryOne(sql, function (err, result) {
     if (err) {
@@ -496,41 +534,9 @@ function queryLocation (ident, callback) {
       return callback(err);
     }
 
-    callback(null, ss(result));
+    callback(null, objectifyLocation(result));
   });
 
-  function ss (location) {
-    return {
-      ident: location.ident,
-      name: location.name,
-      type: location.type,
-      areatype: location.areatype,
-      path: getPath(location.areatype, location.ident),
-      // greater_const_ident: location.parent_ident,
-      votes_allowed: location.votes_allowed,
-      votes_made: location.votes_made,
-      votes_pct: location.votes_pct,
-      votes_valid: location.votes_valid,
-      votes_invalid_blank: location.votes_invalid_blank,
-      votes_invalid_other: location.votes_invalid_other,
-      votes_invalid_total: location.votes_invalid_total,
-      status_code: location.status_code,
-      status_text: location.status_text,
-      winner: location.votes_yes > location.votes_no ? 'JA' : 'NEJ',
-      results: {
-        "JA": {
-          "name": "JA",
-          "votes": location.votes_yes,
-          "votes_pct": location.votes_yes_pct
-        },
-        "NEJ": {
-          "name": "NEJ",
-          "votes": location.votes_no,
-          "votes_pct": location.votes_no_pct
-        },
-      }
-    }
-  }
 }
 
 function queryLocations (areatype, parent_ident, callback) {
@@ -559,39 +565,8 @@ function queryLocations (areatype, parent_ident, callback) {
       return callback(err);
     }
 
-    var locations = result.map(function (location) {
-      return {
-        ident: location.ident,
-        name: location.name,
-        type: location.type,
-        areatype: location.areatype,
-        path: getPath(location.areatype, location.ident),
-        // greater_const_ident: location.parent_ident,
-        votes_allowed: location.votes_allowed,
-        votes_made: location.votes_made,
-        votes_pct: location.votes_pct,
-        votes_valid: location.votes_valid,
-        votes_invalid_blank: location.votes_invalid_blank,
-        votes_invalid_other: location.votes_invalid_other,
-        votes_invalid_total: location.votes_invalid_total,
-        status_code: location.status_code,
-        status_text: location.status_text,
-        winner: location.votes_yes > location.votes_no ? 'JA' : 'NEJ',
-        results: {
-          "JA": {
-            "name": "JA",
-            "votes": location.votes_yes,
-            "votes_pct": location.votes_yes_pct
-          },
-          "NEJ": {
-            "name": "NEJ",
-            "votes": location.votes_no,
-            "votes_pct": location.votes_no_pct
-          },
-        }
-      }
-    });
-  
+    var locations = result.map(objectifyLocation);
+
     callback(null, locations);
   });
 }
