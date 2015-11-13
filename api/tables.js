@@ -5,9 +5,9 @@ var db = require('./db.js'),
     map = require('./map.js');
 
 
-module.exports.register = function (plugin, options, next) {
+module.exports.register = function (server, options, next) {
 
-  plugin.route({
+  server.route({
     method: 'get',
     path: '/landet',
     handler: function (request, reply) {
@@ -18,7 +18,7 @@ module.exports.register = function (plugin, options, next) {
     }
   });
 
-  plugin.route({
+  server.route({
     method: 'get',
     path: '/storkreds/{ident?}',
     handler: function (request, reply) {
@@ -29,7 +29,7 @@ module.exports.register = function (plugin, options, next) {
     }
   });
 
-  plugin.route({
+  server.route({
     method: 'get',
     path: '/kreds/{ident?}',
     handler: function (request, reply) {
@@ -40,7 +40,7 @@ module.exports.register = function (plugin, options, next) {
     }
   });
 
-  plugin.route({
+  server.route({
     method: 'get',
     path: '/afstemningssted/{ident?}',
     handler: function (request, reply) {
@@ -76,79 +76,49 @@ function cb (reply) {
 
 
 function getCountry (callback) {
-  queryLocation('L', '0', addSublocations('S', callback));
+  var areatype = 'L',
+      ident = '0';
 
-  // "hierarchy": [
-  //   {
-  //     "ident": "L1",
-  //     "name": "Hele landet",
-  //     "areatype": "L",
-  //     "path": "/landet"
-  //   }
-}
-
-function addSublocations (areatype, ident, callback) {
-  if (typeof ident === 'function' && callback === undefined) {
-    callback = ident;
-    ident = null;
-  }
-
-  return function (err, location) {
-    queryLocations(areatype, ident, function (err, locations) {
-      if (location && locations) {
-        location.locations_completed = 0;
-        locations.forEach(function (loc) {
-          if (loc.status_code === 12)
-            ++location.locations_completed;
-        });
-        location.locations_total = locations.length,
-        location.locations = locations;
-      }
-      callback(err, location);
-    });
-  };
+  getLocation(areatype, ident,
+    addSublocations('S', 
+      addHierachy(callback)));
 }
 
 
 function getGreater (ident, callback) {
-  if (ident) {
-    queryLocation('S', ident, addSublocations('K', ident, callback));
-  } else {
-    queryLocations('S', callback);
-  }
+  var areatype = 'S';
 
-  // TODO: 
-  // "hierarchy": [
-  //   {
-  //     "ident": "L1",
-  //     "name": "Hele landet",
-  //     "areatype": "L",
-  //     "path": "/landet"
-  //   },
-  //   {
-  //     "ident": "S8",
-  //     "name": "Østjyllands Storkreds",
-  //     "areatype": "S",
-  //     "path": "/storkreds/S8"
-  //   }
-  // ]
+  if (ident) {
+    getLocation(areatype, ident,
+      addSublocations('K', ident,
+        addHierachy(callback)));
+  } else {
+    queryLocations(areatype, callback);
+  }
 }
 
 
 function getConst (ident, callback) {
+  var areatype = 'K';
+
   if (ident) {
-    queryLocation('K', ident, addSublocations('D', ident, callback));
+    getLocation(areatype, ident,
+      addSublocations('D', ident,
+        addHierachy(callback)));
   } else {
-    queryLocations('K', callback);
+    queryLocations(areatype, callback);
   }
 }
 
 
 function getPolling (ident, callback) {
+  var areatype = 'D';
+
   if (ident) {
-    queryLocation('D', ident, callback);
+    getLocation(areatype, ident,
+      addHierachy(callback));
   } else {
-    queryLocations('D', callback);
+    queryLocations(areatype, callback);
   }
 }
 
@@ -156,55 +126,55 @@ function getPolling (ident, callback) {
 
 
 
-function getResultsAndFixHierarchy (ident, party_letter, callback) {
-  return function (error, hierarchy) {
-    if (error) return callback(error);
-    if (hierarchy === null) return callback(null, null);
+// function getResultsAndFixHierarchy (ident, party_letter, callback) {
+//   return function (error, hierarchy) {
+//     if (error) return callback(error);
+//     if (hierarchy === null) return callback(null, null);
 
-    getLocationPartyCandidates(ident, party_letter, function (error, results) {
-      if (error) return callback(error);
+//     getLocationPartyCandidates(ident, party_letter, function (error, results) {
+//       if (error) return callback(error);
 
-      var location = hierarchy[hierarchy.length -1];
+//       var location = hierarchy[hierarchy.length -1];
 
-      var data = {
-        ident: ident,
-        name: location.name,
-        areatype: location.areatype,
-        party_letter: results.length > 0 ? results[0].party_letter : '',
-        party_name: results.length > 0 ? results[0].party_name : '',
-        result_time: results.length > 0 ? results[0].result_time : '',
-        results: results.filter(filterLocationPartyCandidates)
-      };
+//       var data = {
+//         ident: ident,
+//         name: location.name,
+//         areatype: location.areatype,
+//         party_letter: results.length > 0 ? results[0].party_letter : '',
+//         party_name: results.length > 0 ? results[0].party_name : '',
+//         result_time: results.length > 0 ? results[0].result_time : '',
+//         results: results.filter(filterLocationPartyCandidates)
+//       };
 
-      hierarchy.push({
-        party_letter: party_letter,
-        name: results.length > 0 ? results[0].party_name : '',
-        path: location.path + '/' + party_letter
-      });
+//       hierarchy.push({
+//         party_letter: party_letter,
+//         name: results.length > 0 ? results[0].party_name : '',
+//         path: location.path + '/' + party_letter
+//       });
 
-      data.hierarchy = hierarchy;
+//       data.hierarchy = hierarchy;
 
-      callback(null, data);
-    });
-  };
+//       callback(null, data);
+//     });
+//   };
 
-  function filterLocationPartyCandidates (candidate) {
-    return candidate.name !== null;
-  }
-}
+//   function filterLocationPartyCandidates (candidate) {
+//     return candidate.name !== null;
+//   }
+// }
 
 
-function getLocationPartyCandidates (ident, party_letter, callback) {
-  var sql = [
-    'SELECT candidate.name, LOWER(result.party_letter) AS party_letter, result.party_name, candidate.votes, result.result_time',
-    'FROM result',
-    'LEFT JOIN candidate ON candidate.result_fk = result.id',
-    'WHERE result.ident =' + db.escape(ident),
-    'AND result.party_letter = UPPER(', db.escape(party_letter), ')',
-    'ORDER BY candidate.name ASC'].join(' ');
+// function getLocationPartyCandidates (ident, party_letter, callback) {
+//   var sql = [
+//     'SELECT candidate.name, LOWER(result.party_letter) AS party_letter, result.party_name, candidate.votes, result.result_time',
+//     'FROM result',
+//     'LEFT JOIN candidate ON candidate.result_fk = result.id',
+//     'WHERE result.ident =' + db.escape(ident),
+//     'AND result.party_letter = UPPER(', db.escape(party_letter), ')',
+//     'ORDER BY candidate.name ASC'].join(' ');
 
-  db.query(sql, callback);
-}
+//   db.query(sql, callback);
+// }
 
 
 
@@ -219,7 +189,7 @@ function objectifyLocation (location) {
     type: location.type,
     areatype: location.areatype,
     path: getPath(location.areatype, location.ident),
-    // greater_const_ident: location.parent_ident,
+    parent_ident: location.parent_ident,
     votes_allowed: location.votes_allowed,
     votes_made: location.votes_made,
     votes_pct: location.votes_pct,
@@ -243,20 +213,21 @@ function objectifyLocation (location) {
       },
     }
   }
+}
 
-  function getPath (areatype, ident) {
-    switch(areatype) {
-      case 'L': return '/landet';
-      case 'A': return '/landsdel'.concat('/', ident);
-      case 'S': return '/storkreds'.concat('/', ident);
-      case 'K': return '/kreds'.concat('/', ident);
-      case 'D': return '/afstemningssted'.concat('/', ident);
-    }
+
+function getPath (areatype, ident) {
+  switch(areatype) {
+    case 'L': return '/landet';
+    case 'A': return '/landsdel'.concat('/', ident);
+    case 'S': return '/storkreds'.concat('/', ident);
+    case 'K': return '/kreds'.concat('/', ident);
+    case 'D': return '/afstemningssted'.concat('/', ident);
   }
 }
 
 
-function queryLocation (areatype, ident, callback) {
+function getLocation (areatype, ident, callback) {
   var sql = [
     'SELECT ident, name, type, areatype, parent_ident,',
     'votes_allowed, votes_made, votes_pct,',
@@ -310,125 +281,118 @@ function queryLocations (areatype, parent_ident, callback) {
 }
 
 
+function addSublocations (areatype, ident, callback) {
+  if (typeof ident === 'function' && callback === undefined) {
+    callback = ident;
+    ident = null;
+  }
 
-function getCountryHierachy (callback) {
-  var hierarchy = [{ ident: 'L1', name: 'Hele landet', areatype: 'L', path: '/landet' }];
-
-  if (callback !== undefined && typeof callback === 'function')
-    callback(null, hierarchy);
-
-  return hierarchy;
-}
-
-
-function getGreaterHierachy (ident, callback) {
-  var sql = [
-  'SELECT', [
-    'country.ident AS country_ident',
-    'country.name AS country_name',
-    'country.area_type AS country_areatype',
-    'greater.ident AS greater_ident',
-    'greater.name AS greater_name',
-    'greater.area_type AS greater_areatype'].join(','),
-  'FROM location AS greater',
-  'LEFT JOIN location AS country ON country.ident = "L1"',
-  'WHERE greater.ident =',
-  db.escape(ident)].join(' ');
-
-  db.queryOne(sql, buildHierarchy(callback));
-}
-
-
-function getConstHierachy (ident, callback) {
-  var sql = [
-  'SELECT', [
-    'country.ident AS country_ident',
-    'country.name AS country_name',
-    'country.area_type AS country_areatype',
-    'greater.ident AS greater_ident',
-    'greater.name AS greater_name',
-    'greater.area_type AS greater_areatype',
-    'const.ident AS const_ident',
-    'const.name AS const_name',
-    'const.area_type AS const_areatype',].join(','),
-  'FROM location AS const',
-  'LEFT JOIN location AS country ON country.ident = "L1"',
-  'LEFT JOIN location AS greater ON greater.ident = const.greater_const_ident',
-  'WHERE const.ident =',
-  db.escape(ident)].join(' ');
-
-  db.queryOne(sql, buildHierarchy(callback));
-}
-
-
-function getPollingHierachy (ident, callback) {
-  var sql = [
-  'SELECT', [
-    'country.ident AS country_ident',
-    'country.name AS country_name',
-    'country.area_type AS country_areatype',
-    'greater.ident AS greater_ident',
-    'greater.name AS greater_name',
-    'greater.area_type AS greater_areatype',
-    'const.ident AS const_ident',
-    'const.name AS const_name',
-    'const.area_type AS const_areatype',
-    'polling.ident AS polling_ident',
-    'polling.name AS polling_name',
-    'polling.area_type AS polling_areatype',].join(','),
-  'FROM location AS polling',
-  'LEFT JOIN location AS country ON country.ident = "L1"',
-  'LEFT JOIN location AS greater ON greater.ident = polling.greater_const_ident',
-  'LEFT JOIN location AS const ON const.ident = polling.const_ident',
-  'WHERE polling.ident =',
-  db.escape(ident)].join(' ');
-
-  db.queryOne(sql, buildHierarchy(callback));
-}
-
-function buildHierarchy(callback) {
-  return function (error, result) {
-    if (error) return callback(error);
-    if (result === null) return callback(null, null);
-  
-    var hierarchy = [];
-
-    if (result.country_ident) {
-      hierarchy.push({
-        ident: result.country_ident,
-        name: result.country_name,
-        areatype: result.country_areatype,
-        path: '/landet'
-      });
-    }
-
-    if (result.greater_ident) {
-      hierarchy.push({
-        ident: result.greater_ident,
-        name: result.greater_name,
-        areatype: result.greater_areatype,
-        path: '/storkreds/' + result.greater_ident
-      });
-    }
-
-    if (result.const_ident) {
-      hierarchy.push({
-        ident: result.const_ident,
-        name: result.const_name,
-        areatype: result.const_areatype,
-        path: '/kreds/' + result.const_ident
-      });
-    }
-
-    if (result.polling_ident) {
-      hierarchy.push({
-        ident: result.polling_ident,
-        name: result.polling_name,
-        areatype: result.polling_areatype,
-        path: '/afstemningssted/' + result.polling_ident
-      });
-    }
-
-    callback(null, hierarchy);
+  return function (err, location) {
+    queryLocations(areatype, ident, function (err, locations) {
+      if (location && locations) {
+        location.locations_completed = 0;
+        locations.forEach(function (loc) {
+          if (loc.status_code === 12)
+            ++location.locations_completed;
+        });
+        location.locations_total = locations.length,
+        location.locations = locations;
+      }
+      callback(err, location);
+    });
   };
+}
+
+
+function addHierachy (callback) {
+  return function (err, location) {
+    if (err) {
+      return callback(err);
+    }
+
+    location.hierarchy = [{
+      "ident": "0",
+      "name": "Hele landet",
+      "areatype": "L",
+      "path": "/landet"
+    }];
+
+    if (location.areatype === 'L') {
+      callback(err, location);
+    } else if (location.areatype === 'S') {
+      addSelf(location);
+      callback(err, location);
+    } else if (location.areatype === 'K') {
+
+      var sql = [
+      'SELECT', [
+        'greater.ident AS greater_ident',
+        'greater.name AS greater_name',
+        'greater.areatype AS greater_areatype'].join(','),
+      'FROM locations AS greater',
+      'WHERE greater.areatype = "S"',
+      'AND greater.ident = ' + db.escape(location.parent_ident)].join(' ');
+
+      db.queryOne(sql, function (err, result) {
+        if (result) {
+          location.hierarchy.push(addGreater(result));
+          addSelf(location);
+        }
+
+        callback(err, location);
+      });
+
+    } else if (location.areatype === 'D') {
+
+      var sql = [
+      'SELECT', [
+        'greater.ident AS greater_ident',
+        'greater.name AS greater_name',
+        'greater.areatype AS greater_areatype',
+        'const.ident AS const_ident',
+        'const.name AS const_name',
+        'const.areatype AS const_areatype'].join(','),
+      'FROM locations AS const',
+      'LEFT JOIN locations AS greater ON greater.areatype = "S" AND greater.ident = const.parent_ident',
+      'WHERE const.areatype = "K"',
+      'AND const.ident = ' + db.escape(location.parent_ident)].join(' ');
+    
+      db.queryOne(sql, function (err, result) {
+        if (result) {
+          location.hierarchy.push(addGreater(result));
+          location.hierarchy.push(addConst(result));
+          addSelf(location);
+        }
+
+        callback(err, location);
+      });
+    }
+  };
+
+  function addGreater (location) {
+    return {
+      ident: location.greater_ident,
+      name: location.greater_name,
+      areatype: location.greater_areatype,
+      path: getPath(location.greater_areatype, location.greater_ident)
+    };
+  }
+
+  function addConst (location) {
+    return {
+      ident: location.const_ident,
+      name: location.const_name,
+      areatype: location.const_areatype,
+      path: getPath(location.const_areatype, location.const_ident)
+    };
+  }
+
+  function addSelf (location) {
+    location.hierarchy.push({
+      ident: location.ident,
+      name: location.name,
+      areatype: location.areatype,
+      path: location.path
+    });
+  }
 }
