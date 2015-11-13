@@ -333,14 +333,7 @@ function addHierachy (callback) {
       'WHERE greater.areatype = "S"',
       'AND greater.ident = ' + db.escape(location.parent_ident)].join(' ');
 
-      db.queryOne(sql, function (err, result) {
-        if (result) {
-          location.hierarchy.push(addGreater(result));
-          addSelf(location);
-        }
-
-        callback(err, location);
-      });
+      db.queryOne(sql, buildhierarchy(location));
 
     } else if (location.areatype === 'D') {
 
@@ -357,17 +350,26 @@ function addHierachy (callback) {
       'WHERE const.areatype = "K"',
       'AND const.ident = ' + db.escape(location.parent_ident)].join(' ');
     
-      db.queryOne(sql, function (err, result) {
-        if (result) {
-          location.hierarchy.push(addGreater(result));
-          location.hierarchy.push(addConst(result));
-          addSelf(location);
-        }
-
-        callback(err, location);
-      });
+      db.queryOne(sql, buildhierarchy(location));
     }
   };
+
+  function buildhierarchy (location) {
+    return function (err, result) {
+      if (result) {
+        if (result.greater_ident) {
+          location.hierarchy.push(addGreater(result));
+        }
+        if (result.const_ident) {
+          location.hierarchy.push(addConst(result));
+        }
+
+        addSelf(location);
+      }
+
+      callback(err, location);
+    };
+  }
 
   function addGreater (location) {
     return {
