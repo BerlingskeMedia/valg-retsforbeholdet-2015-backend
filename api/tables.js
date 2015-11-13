@@ -118,16 +118,26 @@ module.exports.queryLocations = queryLocations;
 
 
 function getCountry (callback) {
-  queryLocation('0', function (err, result) {
-    if (err) {
-      console.log(err);
-      return callback(err);
-    }
+  queryLocation('0', addSublocations('S', callback));
+  // queryLocation('0', function (err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //     return callback(err);
+  //   }
 
-    result.path = '/landet';
+  //   result.path = '/landet';
 
-    callback(err, result);
-  });
+
+  //   callback(err, result);
+  // });
+
+  // "hierarchy": [
+  //   {
+  //     "ident": "L1",
+  //     "name": "Hele landet",
+  //     "areatype": "L",
+  //     "path": "/landet"
+  //   }
 
   // var sql = [
   //   'SELECT ident, name, areatype, "/landet" AS path,',
@@ -168,16 +178,53 @@ function getCountry (callback) {
   // });
 }
 
+function addSublocations (areatype, ident, callback) {
+  if (typeof ident === 'function' && callback === undefined) {
+    callback = ident;
+    ident = null;
+  }
+
+  return function (err, location) {
+    queryLocations(areatype, ident, function (err, locations) {
+      if (locations) {
+        location.locations_completed = 0;
+        locations.forEach(function (loc) {
+          if (loc.status_code === 12)
+            ++location.locations_completed;
+        });
+        location.locations_total = locations.length,
+        location.locations = locations;
+      }
+      callback(err, location);
+    });
+  };
+}
+
 
 function getGreater (ident, callback) {
-  queryLocation(ident, function (err, result) {
-    if (err) {
-      console.log(err);
-      return callback(err);
-    }
+  if (ident) {
+    queryLocation(ident, addSublocations('K', ident, callback));
+  } else {
+    queryLocations('S', callback);
+  }
 
-    callback(err, result);
-  });
+  // TODO: 
+  // "hierarchy": [
+  //   {
+  //     "ident": "L1",
+  //     "name": "Hele landet",
+  //     "areatype": "L",
+  //     "path": "/landet"
+  //   },
+  //   {
+  //     "ident": "S8",
+  //     "name": "Østjyllands Storkreds",
+  //     "areatype": "S",
+  //     "path": "/storkreds/S8"
+  //   }
+  // ]
+
+
   // var sql = [
   //   'SELECT ident, name, area_type AS areatype, votes_allowed, votes_made, votes_pct, votes_counted_pct, updated_at',
   //   'FROM location',
@@ -228,93 +275,105 @@ function getGreater (ident, callback) {
 
 
 function getConst (ident, callback) {
-  var sql = [
-    'SELECT ident, name, area_type AS areatype, votes_allowed, votes_made, votes_pct, votes_counted_pct, updated_at',
-    'FROM location',
-    'WHERE area_type = "K"',
-    ident ? 'AND ident = ' + db.escape(ident) : ''].join(' ');
-
   if (ident) {
-
-    db.queryOne(sql, function (error, location) {
-      if (error) return callback(error);
-      if (constituency === null) return callback(null, null);
-
-      if (constituency.votes_made === 0) {
-        constituency.updated_at = "-";
-      }
-
-      queryResults(constituency.ident, function (error, result) {
-        if (error) return callback(error);
-
-        result.map(function(r) {
-          r.path = '/kreds/' + constituency.ident + '/' + r.party_letter;
-        });
-
-        constituency.results = result;
-
-        queryLocations('D', ident, function (error, polling) {
-          if (error) return callback(error);
-
-          constituency.locations_completed = countCompletedLocation(polling);
-          constituency.locations_total = polling.length;
-          constituency.locations = polling;
-
-          getConstHierachy(constituency.ident, function (error, hierarchy) {
-            if (error) return callback(error);
-
-            constituency.hierarchy = hierarchy;
-            callback(null, constituency);
-          });
-        });
-      });
-    });
-
+    queryLocation(ident, addSublocations('D', ident, callback));
   } else {
-    db.query(sql, callback);
+    queryLocations('K', callback);
   }
+
+  // var sql = [
+  //   'SELECT ident, name, area_type AS areatype, votes_allowed, votes_made, votes_pct, votes_counted_pct, updated_at',
+  //   'FROM location',
+  //   'WHERE area_type = "K"',
+  //   ident ? 'AND ident = ' + db.escape(ident) : ''].join(' ');
+
+  // if (ident) {
+
+  //   db.queryOne(sql, function (error, location) {
+  //     if (error) return callback(error);
+  //     if (constituency === null) return callback(null, null);
+
+  //     if (constituency.votes_made === 0) {
+  //       constituency.updated_at = "-";
+  //     }
+
+  //     queryResults(constituency.ident, function (error, result) {
+  //       if (error) return callback(error);
+
+  //       result.map(function(r) {
+  //         r.path = '/kreds/' + constituency.ident + '/' + r.party_letter;
+  //       });
+
+  //       constituency.results = result;
+
+  //       queryLocations('D', ident, function (error, polling) {
+  //         if (error) return callback(error);
+
+  //         constituency.locations_completed = countCompletedLocation(polling);
+  //         constituency.locations_total = polling.length;
+  //         constituency.locations = polling;
+
+  //         getConstHierachy(constituency.ident, function (error, hierarchy) {
+  //           if (error) return callback(error);
+
+  //           constituency.hierarchy = hierarchy;
+  //           callback(null, constituency);
+  //         });
+  //       });
+  //     });
+  //   });
+
+  // } else {
+  //   db.query(sql, callback);
+  // }
 }
 
 
 function getPolling (ident, callback) {
-  var sql = [
-    'SELECT ident, name, area_type AS areatype, votes_allowed, votes_made, votes_pct, votes_counted_pct, updated_at',
-    'FROM location',
-    'WHERE area_type = "D"',
-    ident ? 'AND ident = ' + db.escape(ident) : ''].join(' ');
-
   if (ident) {
-
-    db.queryOne(sql, function (error, polling) {
-      if (error) return callback(error);
-      if (polling === null) return callback(null, null);
-
-      if (polling.votes_made === 0) {
-        polling.updated_at = "-";
-      }
-
-      queryResults(polling.ident, function (error, result) {
-        if (error) return callback(error);
-
-        result.map(function(r) {
-          r.path = '/afstemningssted/' + polling.ident + '/' + r.party_letter;
-        });
-
-        polling.results = result;
-
-        getPollingHierachy(polling.ident, function (error, hierarchy) {
-          if (error) return callback(error);
-
-          polling.hierarchy = hierarchy;
-          callback(null, polling);
-        });
-
-      });
-    });
-
+    queryLocation(ident, callback);
   } else {
-    db.query(sql, callback);
+    queryLocations('D', callback);
   }
+
+  // var sql = [
+  //   'SELECT ident, name, area_type AS areatype, votes_allowed, votes_made, votes_pct, votes_counted_pct, updated_at',
+  //   'FROM location',
+  //   'WHERE area_type = "D"',
+  //   ident ? 'AND ident = ' + db.escape(ident) : ''].join(' ');
+
+  // if (ident) {
+
+  //   db.queryOne(sql, function (error, polling) {
+  //     if (error) return callback(error);
+  //     if (polling === null) return callback(null, null);
+
+  //     if (polling.votes_made === 0) {
+  //       polling.updated_at = "-";
+  //     }
+
+  //     queryResults(polling.ident, function (error, result) {
+  //       if (error) return callback(error);
+
+  //       result.map(function(r) {
+  //         r.path = '/afstemningssted/' + polling.ident + '/' + r.party_letter;
+  //       });
+
+  //       polling.results = result;
+
+  //       getPollingHierachy(polling.ident, function (error, hierarchy) {
+  //         if (error) return callback(error);
+
+  //         polling.hierarchy = hierarchy;
+  //         callback(null, polling);
+  //       });
+
+  //     });
+  //   });
+
+  // } else {
+  //   db.query(sql, callback);
+  // }
 }
 
 
@@ -446,7 +505,7 @@ function queryLocation (ident, callback) {
       name: location.name,
       type: location.type,
       areatype: location.areatype,
-      path: getPathPrefix(location.areatype).concat('/',location.ident),
+      path: getPath(location.areatype, location.ident),
       // greater_const_ident: location.parent_ident,
       votes_allowed: location.votes_allowed,
       votes_made: location.votes_made,
@@ -482,7 +541,6 @@ function queryLocations (areatype, parent_ident, callback) {
 
   var sql = [
     'SELECT ident, name, type, areatype,',
-    'CONCAT("' + getPathPrefix(areatype) + '/", ident) AS path,',
     'parent_ident,',
     'votes_allowed, votes_made, votes_pct,',
     'votes_valid, votes_invalid_blank, votes_invalid_other, votes_invalid_other, votes_invalid_total,',
@@ -507,7 +565,7 @@ function queryLocations (areatype, parent_ident, callback) {
         name: location.name,
         type: location.type,
         areatype: location.areatype,
-        path: location.path,
+        path: getPath(location.areatype, location.ident),
         // greater_const_ident: location.parent_ident,
         votes_allowed: location.votes_allowed,
         votes_made: location.votes_made,
@@ -538,44 +596,44 @@ function queryLocations (areatype, parent_ident, callback) {
   });
 }
 
-function getPathPrefix (areatype) {
+function getPath (areatype, ident) {
   switch(areatype) {
     case 'L': return '/landet';
-    case 'A': return '/landsdel';
-    case 'S': return '/storkreds';
-    case 'K': return '/kreds';
-    case 'D': return '/afstemningssted';
+    case 'A': return '/landsdel'.concat('/', ident);
+    case 'S': return '/storkreds'.concat('/', ident);
+    case 'K': return '/kreds'.concat('/', ident);
+    case 'D': return '/afstemningssted'.concat('/', ident);
   }
 }
 
 
 
-function queryCompletedLocations (area_type, greater_const_ident, callback) {
-  if (callback === undefined && typeof greater_const_ident === 'function') {
-    callback = greater_const_ident;
-    greater_const_ident = null;
-  }
+// function queryCompletedLocations (area_type, greater_const_ident, callback) {
+//   if (callback === undefined && typeof greater_const_ident === 'function') {
+//     callback = greater_const_ident;
+//     greater_const_ident = null;
+//   }
 
-  var sql = [
-    'SELECT SUM(CASE WHEN votes_counted_pct = 100.0 THEN 1 ELSE 0 END) AS completed, COUNT(id) AS total',
-    'FROM location',
-    'WHERE area_type = ' + db.escape(area_type),
-    greater_const_ident !== null ? 'AND greater_const_ident = ' + db.escape(greater_const_ident) : ''].join(' ');
+//   var sql = [
+//     'SELECT SUM(CASE WHEN votes_counted_pct = 100.0 THEN 1 ELSE 0 END) AS completed, COUNT(id) AS total',
+//     'FROM location',
+//     'WHERE area_type = ' + db.escape(area_type),
+//     greater_const_ident !== null ? 'AND greater_const_ident = ' + db.escape(greater_const_ident) : ''].join(' ');
 
-  db.queryOne(sql, callback);
-}
+//   db.queryOne(sql, callback);
+// }
 
 
-function countCompletedLocation(locations) {
-  var completed = 0;
-  locations.forEach(function (location) {
-    if (location.votes_counted_pct === 100.0) {
-      completed++;
-    }
-  });
+// function countCompletedLocation(locations) {
+//   var completed = 0;
+//   locations.forEach(function (location) {
+//     if (location.votes_counted_pct === 100.0) {
+//       completed++;
+//     }
+//   });
 
-  return completed;
-}
+//   return completed;
+// }
 
 
 function getCountryHierachy (callback) {
@@ -701,36 +759,36 @@ function buildHierarchy(callback) {
 }
 
 
-function getGreaterCandidates (request, reply) {
-var total_personal_votes_sql = [
-  'SELECT r.ident,',
-  'l.name AS location_name,',
-  'SUM(c.votes) AS total_personal_votes',
-  'FROM candidate AS c',
-  'JOIN result AS r ON c.result_fk = r.id',
-  'JOIN location AS l ON l.ident = r.ident',
-  'WHERE l.area_type = "S"',
-  'GROUP BY l.ident'].join(' ');
+// function getGreaterCandidates (request, reply) {
+// var total_personal_votes_sql = [
+//   'SELECT r.ident,',
+//   'l.name AS location_name,',
+//   'SUM(c.votes) AS total_personal_votes',
+//   'FROM candidate AS c',
+//   'JOIN result AS r ON c.result_fk = r.id',
+//   'JOIN location AS l ON l.ident = r.ident',
+//   'WHERE l.area_type = "S"',
+//   'GROUP BY l.ident'].join(' ');
 
-  var sql = [
-    'SELECT',
-      [
-        'candidate.name',
-        'result.ident',
-        'location.name AS location_name',
-        'location.area_type AS areatype',
-        'LOWER(result.party_letter) AS party_letter',
-        'result.party_name',
-        'candidate.votes',
-        'candidate.votes / (greater_result.total_personal_votes / 100 ) AS votes_pct'].join(','),
-    'FROM candidate',
-    'JOIN result ON result.id = candidate.result_fk',
-    'JOIN (',
-      total_personal_votes_sql,
-    ') AS greater_result ON greater_result.ident = result.ident',
-    'JOIN location ON location.ident = result.ident',
-    request.params.party_letter ? 'WHERE result.party_letter = UPPER(' + db.escape(request.params.party_letter) + ')' : '',
-    'ORDER BY candidate.name ASC'].join(' ');
+//   var sql = [
+//     'SELECT',
+//       [
+//         'candidate.name',
+//         'result.ident',
+//         'location.name AS location_name',
+//         'location.area_type AS areatype',
+//         'LOWER(result.party_letter) AS party_letter',
+//         'result.party_name',
+//         'candidate.votes',
+//         'candidate.votes / (greater_result.total_personal_votes / 100 ) AS votes_pct'].join(','),
+//     'FROM candidate',
+//     'JOIN result ON result.id = candidate.result_fk',
+//     'JOIN (',
+//       total_personal_votes_sql,
+//     ') AS greater_result ON greater_result.ident = result.ident',
+//     'JOIN location ON location.ident = result.ident',
+//     request.params.party_letter ? 'WHERE result.party_letter = UPPER(' + db.escape(request.params.party_letter) + ')' : '',
+//     'ORDER BY candidate.name ASC'].join(' ');
 
-  db.query(sql, reply);
-}
+//   db.query(sql, reply);
+// }

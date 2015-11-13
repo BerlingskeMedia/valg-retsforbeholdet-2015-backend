@@ -34,10 +34,6 @@ module.exports.register.attributes = {
 };
 
 
-module.exports.votes_counted_pct = getCountryCompletion;
-module.exports.latest_votes_counted_complete = getLatestCompletedConstituencies;
-
-
 function getCountryCompletion (callback) {
   var sql = [
     'SELECT status_code, status_text, votes_yes, votes_yes_pct, votes_no, votes_no_pct, updated_at',
