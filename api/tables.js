@@ -60,6 +60,7 @@ module.exports.register.attributes = {
 };
 
 
+module.exports.getLocation = getLocation;
 module.exports.queryLocations = queryLocations;
 
 
@@ -199,6 +200,7 @@ function objectifyLocation (location) {
     votes_invalid_total: location.votes_invalid_total,
     status_code: location.status_code,
     status_text: location.status_text,
+    result_time: location.updated_at,
     winner: location.votes_yes > location.votes_no ? 'JA' : 'NEJ',
     results: {
       "JA": {
@@ -234,7 +236,7 @@ function getLocation (areatype, ident, callback) {
     'votes_valid, votes_invalid_blank, votes_invalid_other, votes_invalid_other, votes_invalid_total,',
     'votes_yes, votes_yes_pct,',
     'votes_no, votes_no_pct,',
-    'status_code, status_text',
+    'status_code, status_text, updated_at',
     'FROM locations',
     'WHERE areatype = ' + db.escape(areatype),
     'AND ident = ' + db.escape(ident)].join(' ');
@@ -263,7 +265,7 @@ function queryLocations (areatype, parent_ident, callback) {
     'votes_valid, votes_invalid_blank, votes_invalid_other, votes_invalid_other, votes_invalid_total,',
     'votes_yes, votes_yes_pct,',
     'votes_no, votes_no_pct,',
-    'status_code, status_text',
+    'status_code, status_text, updated_at',
     'FROM locations',
     'WHERE areatype = ' + db.escape(areatype),
     parent_ident !== null ? 'AND parent_ident = ' + db.escape(parent_ident) : '',

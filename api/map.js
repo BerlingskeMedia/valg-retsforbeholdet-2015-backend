@@ -34,39 +34,6 @@ module.exports.register.attributes = {
 };
 
 
-function getCountryCompletion (callback) {
-  var sql = [
-    'SELECT status_code, status_text, votes_yes, votes_yes_pct, votes_no, votes_no_pct, updated_at',
-    'FROM locations',
-    'WHERE ident = "0"'].join(' ');
-
-  return db.queryOne(sql, function (err, result) {
-    if (err) {
-      console.log(new Date, err);
-      return callback(err);
-    }
-
-    var data = {
-      result_time: result.updated_at,
-      results: {
-        "JA": {
-          "name": "JA",
-          "votes": result.votes_yes,
-          "votes_pct": result.votes_yes_pct
-        },
-        "NEJ": {
-          "name": "NEJ",
-          "votes": result.votes_no,
-          "votes_pct": result.votes_no_pct
-        }
-      }
-    };
-
-    callback(null, data);
-  });
-}
-
-
 function getLatestCompletedConstituencies (ident, callback) {
   if (typeof ident === 'function' && callback === undefined) {
     callback = ident;
@@ -129,7 +96,7 @@ function getMapData (request, reply) {
   //   console.log('removeListener')
   // });
 
-  getCountryCompletion(function (err, data) {
+  tables.getLocation('L', '0', function (err, data) {
     if (err) return reply().code(500);
     if (data === null) return reply();
 
@@ -151,7 +118,7 @@ function getMapData (request, reply) {
 
 
 function getTeaserData (request, reply) {
-  getCountryCompletion( function (err, data) {
+  tables.getLocation('L', '0', function (err, data) {
     if (err) return reply().code(500);
 
     reply(data);
