@@ -9,19 +9,47 @@ var events = require('events'),
     dst = require('./dst_client'),
     // valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1475796',
     valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
-    valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/');
+    valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
+    status_valgdag = false,
+    status_locationstatus = {};
 
 
-function start () {
-  if (true) {
-    importValgdag(waitOneMinute(start));
-  } else {
-    importFintal(waitOneMinute(start));
-  }
+function run () {
+  getStatus(function () {
+    if (status_valgdag) {
+      importValgdag(waitOneMinute(run));
+    } else {
+      importFintal(waitOneMinute(run));
+    }
+  });
 }
 
-start();
+run();
 
+
+function getStatus (callback) {
+  var sql = [
+    'SELECT ident, status_code, updated_at',
+    'FROM locations'].join(' ');
+
+  db.query(sql, function (error, result) {
+
+    status_valgdag =
+      result.length === 0 ||
+      result.some(function (element) {
+        return element.status_code === 0;
+      });
+
+    result.forEach(function (location) {
+      status_locationstatus[location.ident] = {
+        status_code: location.status_code,
+        updated_at: location.updated_at
+      }
+    });
+
+    callback();
+  });
+}
 
 function waitOneMinute (callback) {
   return function () {
@@ -103,10 +131,10 @@ function getAndInsert (locations, callback) {
 }
 
 
-function insertLocation (location, callback) {
+function insertLocation (location_header, callback) {
   return function (error, orgdata) {
     if (error) {
-      console.log(new Date(), error, location);
+      console.log(new Date(), error, location_header);
       callback(error);
       return;
     }
@@ -138,7 +166,7 @@ function insertLocation (location, callback) {
     }
 
     var convdata = convertData(orgdata);
-    setParent(location, convdata);
+    setParent(location_header, convdata);
     var sql = buildInsert(convdata);
 
     db.query(sql, function (error, result) {
