@@ -28,8 +28,9 @@ WORKDIR /election
 COPY ./api /election/api
 COPY ./fakedata /election/fakedata
 COPY ./node_modules /election/node_modules
-# COPY ./sync /election/sync
+COPY ./sync /election/sync
 
 EXPOSE 8000
 
-CMD ["node", "api/server.js"]
+ENTRYPOINT ["node"]
+CMD ["api/server.js"]
