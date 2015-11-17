@@ -20,18 +20,20 @@ module.exports.getData = function (url, callback) {
     });
 
     res.on('end', function () {
-      parser.parseString(data,
-        function (error, result) {
+      parser.parseString(data, function (error, result) {
         if (error) {
           console.log('parse error on', url, error);
-          callback(error);
+          return callback(error);
+        } else if (result.html) {
+          console.log('Skipping because we found HTML.');
+          callback(null, null);
         } else {
           callback(null, convertDstData(result));
         }
       });
     });
   }).on('error', function (e) {
-    console.log("Got error: " + e.message);
+    console.log("Got error: " + e.message, 'on URL', url);
     callback(e, null);
   });
 };

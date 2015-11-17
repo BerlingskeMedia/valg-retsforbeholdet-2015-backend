@@ -1,40 +1,86 @@
 /*jshint node: true */
 'use strict';
 
-var db = require('../api/db'),
+console.log('Running sync');
+
+var events = require('events'),
+    one_minute = 1000 * 60,
+    db = require('../api/db'),
     dst = require('./dst_client'),
-    valg = 'http://www.dst.dk/valg/Valg1475796/xml/'; // TODO ENV
+    // valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1475796',
+    valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
+    valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/');
 
-// dst.getData(valg.concat('valgdag.xml'), function (error, result) {
-dst.getData(valg.concat('fintal.xml'), function (error, result) {
-  if (error) {
-    return console.log(error);
+
+function start () {
+  if (true) {
+    importValgdag(waitOneMinute(start));
+  } else {
+    importFintal(waitOneMinute(start));
   }
+}
 
-  getAndInsert(result.Land, function (error, result) {
-    console.log('Lande imported', error, result);
-  });
+start();
 
-  getAndInsert(result.Landsdele, function (error, result) {
-    console.log('Landsdele imported', error, result);
-  });
 
-  getAndInsert(result.Storkredse, function (error, result) {
-    console.log('Storkredse imported', error, result);
-  });
+function waitOneMinute (callback) {
+  return function () {
+    console.log('Waiting one minute.');
+    setTimeout(callback, one_minute);
+    // setTimeout(callback, 5000);
+  }
+}
 
-  getAndInsert(result.Opstillingskredse, function (error, result) {
-    console.log('Opstillingskredse imported', error, result);
-  });
 
-  getAndInsert(result.Afstemningsomraader, function (error, result) {
-    console.log('Afstemningsomraader imported', error, result);
+function importValgdag (callback) {
+  console.log(new Date(), 'Importing valgdag');
+  importData('valgdag.xml', callback);
+}
+
+
+function importFintal (callback) {
+  console.log(new Date(), 'Importing fintal');
+  importData('fintal.xml', callback);
+}
+
+
+function importData (filename, callback) {
+  dst.getData(valg.concat(filename), function (error, data) {
+    if (error) {
+      return console.log(new Date(), error);
+    }
+
+    getAndInsert(data.Land, function (error, result) {
+      console.log(new Date(), 'Lande imported');
+      if (error) { console.log(new Date(), error);}
+
+      getAndInsert(data.Landsdele, function (error, result) {
+        console.log(new Date(), 'Landsdele imported');
+        if (error) { console.log(new Date(), error);}
+
+        getAndInsert(data.Storkredse, function (error, result) {
+          console.log(new Date(), 'Storkredse imported');
+          if (error) { console.log(new Date(), error);}
+
+          getAndInsert(data.Opstillingskredse, function (error, result) {
+            console.log(new Date(), 'Opstillingskredse imported');
+            if (error) { console.log(new Date(), error);}
+
+            getAndInsert(data.Afstemningsomraader, function (error, result) {
+              console.log(new Date(), 'Afstemningsomraader imported');
+              if (error) { console.log(new Date(), error);}
+              callback();
+            });
+          });
+        });
+      });
+    });
   });
-});
+}
 
 
 function getAndInsert (locations, callback) {
-  if (locations === null || locations === undefined) {
+  if (locations === null || locations === undefined || locations === '') {
     callback(null);
     return;
   }
@@ -43,10 +89,10 @@ function getAndInsert (locations, callback) {
 
   if (locations instanceof Array) {
     locations.forEach(function (location) {
-      dst.getData(location.filnavn, dbInsert(location, cb));
+      dst.getData(location.filnavn, insertLocation(location, cb));
     });
   } else {
-    dst.getData(locations.filnavn, dbInsert(locations, callback));
+    dst.getData(locations.filnavn, insertLocation(locations, callback));
   }
 
   function cb (error, result) {
@@ -56,11 +102,24 @@ function getAndInsert (locations, callback) {
   }
 }
 
-function dbInsert (location, callback) {
+
+function insertLocation (location, callback) {
   return function (error, orgdata) {
     if (error) {
-      console.log(new Date(), error);
+      console.log(new Date(), error, location);
       callback(error);
+      return;
+    }
+
+    if (orgdata === undefined || orgdata === null) {
+      callback();
+      return;
+    }
+
+    // Vi ignorerer status 10 (Fintællingsresultatet foreligger endnu ikke) for alt andet end 
+    if (orgdata.Sted.Type !== 'Afstemningsomraade' && parseInt(orgdata.Status.Kode) === 10) {
+      console.log('Skipped fintælling', orgdata.Sted);
+      callback(null);
       return;
     }
 
@@ -71,17 +130,24 @@ function dbInsert (location, callback) {
       return;
     }
 
+    // HeleLandet har ID=0.
+    // Men ID mangler når f.eks. kalder http://www.dst.dk/valg/Valg1475796/xml/fintal_0.xml
+    // Derfor sætter jeg ID manuelt på denne måde.
+    if (orgdata.Sted.Type === 'HeleLandet' && orgdata.Sted.Id === '') {
+      orgdata.Sted.Id = '0';
+    }
+
     var convdata = convertData(orgdata);
     setParent(location, convdata);
     var sql = buildInsert(convdata);
 
     db.query(sql, function (error, result) {
       if (error) {
-        console.log(sql);
+        console.log(sql, orgdata);
         console.log(new Date(), error);
         callback(error);
       } else {
-        console.log('Inserted', orgdata.Sted);
+        console.log('Imported', orgdata.Sted);
         callback(null, result);
       }
     });
@@ -91,17 +157,10 @@ function dbInsert (location, callback) {
 
 function convertData (data) {
 
-  // HeleLandet har ID=0.
-  // Men ID mangler når f.eks. kalder http://www.dst.dk/valg/Valg1475796/xml/fintal_0.xml
-  // Derfor sætter jeg ID manuelt på denne måde.
-  if (data.Sted.Id === '' && data.Sted.Type === 'HeleLandet') {
-    data.Sted.Id = '0';
-  }
-
   var row = {
     ident: data.Sted.Id,
     ident_int: parseInt(data.Sted.Id),
-    name: data.Sted._,
+    name: cleanName(data.Sted._),
     type: data.Sted.Type,
     areatype: parseStedType(data.Sted.Type),
     votes_allowed: parseInt(data.Stemmeberettigede),
@@ -130,6 +189,20 @@ function convertData (data) {
   }
 
   return row;
+}
+
+  // Eg.:
+  // 1. Østerbro
+  // 2. Sundbyvester
+  // 3. Indre By
+  // 11. Slots
+  // 12. Slagelse Øst
+function cleanName (name) {
+  var a = name.indexOf('. ');
+  // we're only cleaning names with a '. ' within the first few characters.
+  return a > -1 && a < 4 ?
+    name.substring(a + 2) :
+    name;
 }
 
 
@@ -169,14 +242,34 @@ function parseDate (date) {
   return new Date(values[2].concat('-', values[1], '-', values[0], ' ', values[3]));
 }
 
+
 function buildInsert (data) {
   var columns = [],
-    values = [];
+      values = [];
 
   Object.keys(data).forEach(function (key) {
     columns.push(key);
     values.push(db.escape(data[key]));
   });
 
-  return 'INSERT INTO locations ('.concat(columns.join(', '), ') VALUES (', values.join(', '), ')');
+  return [
+    'INSERT INTO locations ('.concat(columns.join(', '), ') VALUES (', values.join(', '), ')'),
+    'ON DUPLICATE KEY UPDATE',
+    [
+      'votes_allowed = ' + db.escape(data.votes_allowed),
+      'votes_made = ' + db.escape(data.votes_made),
+      'votes_yes = ' + db.escape(data.votes_yes),
+      'votes_yes_pct = ' + db.escape(data.votes_yes_pct),
+      'votes_no = ' + db.escape(data.votes_no),
+      'votes_no_pct = ' + db.escape(data.votes_no_pct),
+      'votes_pct = ' + db.escape(data.votes_pct),
+      'votes_valid = ' + db.escape(data.votes_valid),
+      'votes_invalid_blank = ' + db.escape(data.votes_invalid_blank),
+      'votes_invalid_other = ' + db.escape(data.votes_invalid_other),
+      'votes_invalid_total = ' + db.escape(data.votes_invalid_total),
+      'status_code = ' + db.escape(data.status_code),
+      'status_text = ' + db.escape(data.status_text),
+      'updated_at = ' + db.escape(data.updated_at)
+    ].join(', ')
+  ].join(' ');
 }
