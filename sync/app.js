@@ -52,23 +52,23 @@ function importData (filename, callback) {
 
     getAndInsert(data.Land, function (error, result) {
       console.log(new Date(), 'Lande imported');
-      if (error) { console.log(new Date(), error);}
+      if (error) { console.log(error);}
 
       getAndInsert(data.Landsdele, function (error, result) {
         console.log(new Date(), 'Landsdele imported');
-        if (error) { console.log(new Date(), error);}
+        if (error) { console.log(error);}
 
         getAndInsert(data.Storkredse, function (error, result) {
           console.log(new Date(), 'Storkredse imported');
-          if (error) { console.log(new Date(), error);}
+          if (error) { console.log(error);}
 
           getAndInsert(data.Opstillingskredse, function (error, result) {
             console.log(new Date(), 'Opstillingskredse imported');
-            if (error) { console.log(new Date(), error);}
+            if (error) { console.log(error);}
 
             getAndInsert(data.Afstemningsomraader, function (error, result) {
               console.log(new Date(), 'Afstemningsomraader imported');
-              if (error) { console.log(new Date(), error);}
+              if (error) { console.log(error);}
               callback();
             });
           });
