@@ -33,7 +33,7 @@ server.register(tables, cb);
 
 if (!module.parent) {
   server.start(function() {
-    console.log('Server started on ' + server.info.uri + '.');
+    console.log('API started on ' + server.info.uri + '.');
   });
 }
 

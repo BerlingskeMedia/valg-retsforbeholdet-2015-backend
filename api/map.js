@@ -105,12 +105,17 @@ function getMapData (request, reply) {
 
       data.constituencies = result;
 
-      getLatestCompletedConstituencies(function (err, result) {
-        if (err) return reply().code(500);
+      tables.queryLocations('S', function (err, result) {
 
-        data.latest_votes_counted_complete = result !== null ? result : [];
+        data.locations = result;
 
-        reply(data);
+        getLatestCompletedConstituencies(function (err, result) {
+          if (err) return reply().code(500);
+
+          data.latest_votes_counted_complete = result !== null ? result : [];
+
+          reply(data);
+        });
       }); 
     });
   });
