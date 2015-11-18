@@ -27,3 +27,9 @@ CREATE TABLE IF NOT EXISTS `locations` (
   PRIMARY KEY (`ident`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
 CREATE INDEX `location_ident` ON `locations` (`ident`);
+
+CREATE TABLE IF NOT EXISTS `newsticker` (
+  `id` MEDIUMINT NOT NULL AUTO_INCREMENT,
+  `tweet` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
