@@ -2,6 +2,7 @@
 'use strict';
 
 var Hapi = require('hapi'),
+    Basic = require('hapi-auth-basic'),
     inert = require('inert'),
     fakedata = require('./fakedata.js'),
     map = require('./map.js'),
@@ -26,6 +27,7 @@ server.route({
   }
 });
 
+server.register(Basic, cb);
 server.register(inert, cb);
 server.register(fakedata, { routes: { prefix: '/fake' } }, cb);
 server.register(map, cb);

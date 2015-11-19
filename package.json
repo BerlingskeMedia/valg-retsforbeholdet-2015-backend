@@ -20,6 +20,7 @@
   "homepage": "https://github.com/BerlingskeMedia/valg-retsforbeholdet-2015-backend#readme",
   "dependencies": {
     "hapi": "^11.1.0",
+    "hapi-auth-basic": "^4.1.0",
     "inert": "^3.2.0",
     "mysql": "^2.9.0",
     "xml2js": "^0.4.15"

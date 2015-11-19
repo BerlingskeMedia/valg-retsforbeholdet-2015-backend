@@ -33,3 +33,10 @@ CREATE TABLE IF NOT EXISTS `newsticker` (
   `tweet` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;
+
+CREATE TABLE IF NOT EXISTS `newsticker_users` (
+  `id` MEDIUMINT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET latin1 COLLATE latin1_danish_ci;

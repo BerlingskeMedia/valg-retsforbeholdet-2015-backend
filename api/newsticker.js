@@ -7,6 +7,8 @@ var db = require('./db.js'),
 
 module.exports.register = function (server, options, next) {
 
+  server.auth.strategy('simple', 'basic', { validateFunc: validateUser });
+
   server.route({
     method: 'GET',
     path: '/',
@@ -19,19 +21,28 @@ module.exports.register = function (server, options, next) {
   server.route({
     method: 'POST',
     path: '/',
-    handler: insertTweet
+    handler: insertTweet,
+    config: {
+      auth: 'simple'
+    }
   });
 
   server.route({
     method: 'DELETE',
     path: '/',
-    handler: deleteTweet
+    handler: deleteTweet,
+    config: {
+      auth: 'simple'
+    }
   });
 
   server.route({
     method: 'DELETE',
     path: '/{id}',
-    handler: deleteTweet
+    handler: deleteTweet,
+    config: {
+      auth: 'simple'
+    }
   });
 
   next();
@@ -126,3 +137,21 @@ function deleteTweet (request, reply) {
     }
   }
 }
+
+function validateUser (request, username, password, callback) {
+  db.queryOne('SELECT id, password FROM newsticker_users WHERE username = ' + db.escape(username), function (error, user) {
+    if (error) {
+      return callback(error);
+    }
+
+    if (!user) {
+      return callback(null, false);
+    }
+
+    if (user.password === password) {
+      callback(null, true, { id: user.id, name: username });
+    } else {
+      callback(null, false, null);
+    }
+  });
+};
