@@ -1,6 +1,6 @@
 {
   "name": "valg-retsforbeholdet-2015-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Valg til retsforbeholdet 2015",
   "main": "api/server.js",
   "scripts": {
