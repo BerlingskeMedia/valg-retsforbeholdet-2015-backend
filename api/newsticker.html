@@ -11,11 +11,32 @@
   </head>
   <body>
     <div ng-controller="newstickerCtrl" class="container-fluid">
+      <div class="row well">
+        <h4>HTML koder</h4>
+        <div class="row">
+          <div class="col-sm-1"><span class="label label-default">Link:</span></div>
+          <div class="col-sm-3"><code>&lt;a href=&quot;url&quot;&gt;tekst&lt;/a&gt;</code></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1"><span class="label label-default">Fed:</span></div>
+          <div class="col-sm-3"><code>&lt;strong&gt;tekst&lt;/strong&gt;</code></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1"><span class="label label-default">Kursiv:</span></div>
+          <div class="col-sm-3"><code>&lt;em&gt;tekst&lt;/em&gt;</code></div>
+        </div>
+      </div>
       <div class="row" style="margin-bottom:10px;">
         <div class="col-sm-1"><em>Ny</em></div>
         <div class="col-sm-8"><input class="form-control" ng-model="tweet" type="text" value="Kl. xx"/></div>
         <div class="col-sm-3">
           <button class="btn btn-default" ng-click="create()">Opret</button>
+        </div>
+      </div>
+      <div class="row" style="margin:15px 0px 5px 0px;">
+        <div class="col-sm-8 col-sm-offset-1">
+          <button class="btn btn-warning" ng-click="saveAll()">Gem alle</button>
+          <button class="btn btn-primary" ng-click="load()">Reload</button>
         </div>
       </div>
       <div ng-repeat="tweet in tweets" class="row" style="margin-bottom:4px;">
@@ -26,13 +47,7 @@
           <button class="btn btn-danger" ng-click="delete(tweet, $index)">Slet</button>
         </div>
       </div>
-      <div class="row" style="margin-top:10px;">
-        <div class="col-sm-12">
-          <button class="btn btn-warning" ng-click="saveAll()">Gem</button>
-          <button class="btn btn-primary" ng-click="load()">Reload</button>
-        </div>
-      </div>
-      <div class="row" style="margin-top:10px;">
+      <div class="row well" style="margin-top:10px;">
         <div class="col-sm-12">
           <div ng-repeat="log in logs track by $index">{{log}}</div>
         </div>
@@ -49,7 +64,7 @@
         $scope.load = function () {
           $http.get('/newsticker?c').then(function (success) {
             console.log('load', success);
-            $scope.logs.push('Data hentet ' + moment().format("dddd, MMMM Do YYYY, h:mm:ss"));
+            $scope.logs.push('Data hentet: ' + moment().format("dddd, MMMM Do YYYY, HH:mm:ss"));
             $scope.tweets = success.data;
           });
         };
@@ -60,9 +75,8 @@
             return;
           }
 
-          var tweet = 'Kl. '.concat(moment().format("h:mm"), ': ', $scope.tweet);
+          var tweet = 'Kl. '.concat(moment().format("HH:mm"), ': ', $scope.tweet);
           
-          console.log(tweet);
           $http.post('/newsticker', {tweet: tweet}).then(function (success) {
             console.log('create', success);
             $scope.tweets.splice(0, 0, {
@@ -70,7 +84,7 @@
               tweet: tweet
             });
             $scope.tweet = '';
-            $scope.logs.push('Data oprettet ' + moment().format("dddd, MMMM Do YYYY, h:mm:ss"));
+            $scope.logs.push('Data oprettet: ' + moment().format("dddd, MMMM Do YYYY, HH:mm:ss"));
           });          
         };
 
@@ -78,21 +92,21 @@
           $http.delete('/newsticker/'.concat(tweet.id)).then(function (success) {
             console.log('delete', success);
             $scope.tweets.splice(index, 1);
-            $scope.logs.push('Data slettet ' + moment().format("dddd, MMMM Do YYYY, h:mm:ss"));
+            $scope.logs.push('Data slettet: ' + moment().format("dddd, MMMM Do YYYY, HH:mm:ss"));
           });          
         };
 
         $scope.save = function (tweet, index) {
           $http.put('/newsticker/'.concat(tweet.id), tweet).then(function (success) {
             console.log('save', success);
-            $scope.logs.push('Data gemt ' + moment().format("dddd, MMMM Do YYYY, h:mm:ss"));
+            $scope.logs.push('Data gemt: ' + moment().format("dddd, MMMM Do YYYY, HH:mm:ss"));
           });          
         };
 
         $scope.saveAll = function () {
           $http.post('/newsticker', $scope.tweets).then(function (success) {
             console.log('saveAll', success);
-            $scope.logs.push('All data gemt ' + new moment().format("dddd, MMMM Do YYYY, h:mm:ss"));
+            $scope.logs.push('Alt data gemt: ' + new moment().format("dddd, MMMM Do YYYY, HH:mm:ss"));
           });
         };
       });
