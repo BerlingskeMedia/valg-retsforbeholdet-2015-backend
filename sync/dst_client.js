@@ -20,12 +20,17 @@ module.exports.getData = function (url, callback) {
     });
 
     res.on('end', function () {
+      if(data.indexOf('Siden du søgte findes desværre ikke') > -1) {
+        console.log('Skipping because we found the Page-not-found.', url);
+        return callback(null, null)
+      }
+
       parser.parseString(data, function (error, result) {
         if (error) {
           console.log('parse error on', url, error);
           return callback(error);
         } else if (result.html) {
-          console.log('Skipping because we found HTML.');
+          console.log('Skipping because we found HTML.', url);
           callback(null, null);
         } else {
           callback(null, convertDstData(result));

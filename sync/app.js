@@ -74,29 +74,27 @@ function importFintal (callback) {
 
 function importData (filename, callback) {
   dst.getData(valg.concat(filename), function (error, data) {
-    if (error) {
-      return console.log(new Date(), error);
-    }
+    if (error) {console.log(new Date(), error);}
 
     getAndInsert(data.Land, function (error, result) {
+      if (error) {console.log(error);}
       console.log(new Date(), 'Lande imported');
-      if (error) { console.log(error);}
 
       getAndInsert(data.Landsdele, function (error, result) {
+        if (error) {console.log(error);}
         console.log(new Date(), 'Landsdele imported');
-        if (error) { console.log(error);}
 
         getAndInsert(data.Storkredse, function (error, result) {
+          if (error) {console.log(error);}
           console.log(new Date(), 'Storkredse imported');
-          if (error) { console.log(error);}
 
           getAndInsert(data.Opstillingskredse, function (error, result) {
+            if (error) {console.log(error);}
             console.log(new Date(), 'Opstillingskredse imported');
-            if (error) { console.log(error);}
 
             getAndInsert(data.Afstemningsomraader, function (error, result) {
+              if (error) {console.log(error);}
               console.log(new Date(), 'Afstemningsomraader imported');
-              if (error) { console.log(error);}
               callback();
             });
           });
