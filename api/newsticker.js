@@ -19,9 +19,26 @@ module.exports.register = function (server, options, next) {
   });
 
   server.route({
+    method: 'GET',
+    path: '/admin',
+    handler: function (request, reply) {
+      reply.file('./api/newsticker.html');
+    }
+  });
+
+  server.route({
     method: 'POST',
     path: '/',
     handler: insertTweet,
+    config: {
+      auth: 'simple'
+    }
+  });
+
+  server.route({
+    method: 'PUT',
+    path: '/{id}',
+    handler: updateTweet,
     config: {
       auth: 'simple'
     }
@@ -81,7 +98,7 @@ function insertTweet (request, reply) {
     return reply().code(400);
 
   if (request.payload.tweet instanceof Array) {
-    request.payload.tweet.forEach(insert);
+    request.payload.tweet.forEach(inserts);
     reply();
   } else if (typeof request.payload.tweet === 'string') {
     insert(request.payload.tweet, function (error, result) {
@@ -92,18 +109,47 @@ function insertTweet (request, reply) {
   }
 
   function insert (tweet, callback) {
-    if (callback === undefined) {
-      callback = cb;
-    }
-
     db.query('INSERT INTO newsticker (tweet) VALUES (' + db.escape(tweet) + ')', callback);
+  }
 
-    function cb (error, result) {
-      if (error) {
-        console.log(new Date(), 'Error when inserting tweet', error);
-      }
+  function inserts (tweet, index) {
+
+    var sql = [
+      'INSERT INTO newsticker (id, tweet)',
+      'VALUES (',
+        db.escape(index + 1) + ',',
+       db.escape(tweet),
+       ')',
+      'ON DUPLICATE KEY UPDATE',
+      'tweet = ' + db.escape(tweet)
+    ].join(' ');
+
+    db.query(sql, function (error, result) {
+      var delete_the_rest = 'DELETE FROM newsticker WHERE id > ' + db.escape(request.payload.tweet.length);
+      db.queryOne(delete_the_rest, cb);
+    });
+    // var find_index = 'SELECT id AS top_id FROM newsticker ORDER BY id DESC LIMIT 1';
+
+  }
+
+  function cb (error, result) {
+    if (error) {
+      console.log(new Date(), 'Error when inserting tweet', error);
     }
   }
+}
+
+function updateTweet (request, reply) {
+  if (request.payload === null || request.payload.tweet === undefined)
+    return reply().code(400);
+
+  var sql = [
+    'UPDATE newsticker',
+    'SET tweet = ' + db.escape(request.payload.tweet),
+    'WHERE id = ' + db.escape(request.params.id)
+  ].join(' ');
+
+  db.query(sql, reply);
 }
 
 function deleteTweet (request, reply) {
@@ -154,4 +200,4 @@ function validateUser (request, username, password, callback) {
       callback(null, false, null);
     }
   });
-};
+}
