@@ -94,16 +94,17 @@ function getNewsticker (request, reply) {
 
 
 function insertTweet (request, reply) {
-  if (request.payload === null || request.payload.tweet === undefined)
+  if (request.payload === null)
     return reply().code(400);
 
-  if (request.payload.tweet instanceof Array) {
-    request.payload.tweet.forEach(inserts);
-    reply();
-  } else if (typeof request.payload.tweet === 'string') {
+
+  if (request.payload.tweet !== undefined && typeof request.payload.tweet === 'string') {
     insert(request.payload.tweet, function (error, result) {
       reply(result);
     });
+  } else if (request.payload instanceof Array) {
+    request.payload.forEach(inserts);
+    reply();
   } else {
     reply().code(400);
   }
@@ -117,19 +118,14 @@ function insertTweet (request, reply) {
     var sql = [
       'INSERT INTO newsticker (id, tweet)',
       'VALUES (',
-        db.escape(index + 1) + ',',
-       db.escape(tweet),
+        db.escape(tweet.id) + ',',
+       db.escape(tweet.tweet),
        ')',
       'ON DUPLICATE KEY UPDATE',
-      'tweet = ' + db.escape(tweet)
+      'tweet = ' + db.escape(tweet.tweet)
     ].join(' ');
 
-    db.query(sql, function (error, result) {
-      var delete_the_rest = 'DELETE FROM newsticker WHERE id > ' + db.escape(request.payload.tweet.length);
-      db.queryOne(delete_the_rest, cb);
-    });
-    // var find_index = 'SELECT id AS top_id FROM newsticker ORDER BY id DESC LIMIT 1';
-
+    db.query(sql, cb);
   }
 
   function cb (error, result) {
@@ -146,7 +142,7 @@ function updateTweet (request, reply) {
   var sql = [
     'UPDATE newsticker',
     'SET tweet = ' + db.escape(request.payload.tweet),
-    'WHERE id = ' + db.escape(request.params.id)
+    'WHERE id = ' + db.escape(request.payload.id)
   ].join(' ');
 
   db.query(sql, reply);
