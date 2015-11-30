@@ -11,13 +11,23 @@ var events = require('events'),
     valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
     // valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
     valg = 'http://91.208.143.70/valgtest/valg1664255/xml/',
-    status_valgdag = false;
+    first_run = true;
 
 
 function run () {
-  getStatus(function () {
+  getStatus(function (error, status_valgdag) {
+    if (error) {
+      waitOneMinute(run)
+      return;
+    }
+
     if (status_valgdag) {
-      importValgdag(waitOneMinute(run));
+      if (first_run) {
+        first_run = false;
+        importValgdag(run);
+      } else {
+        importValgdag(waitOneMinute(run));
+      }
     } else {
       importFintal(waitOneMinute(run));
     }
@@ -28,6 +38,7 @@ run();
 
 
 function getStatus (callback) {
+  var status_valgdag = false;
   // Selecting GROUP BY status_code insted of WHERE status_code = "0",
   // because I need to make sure we're not running on an empty table.
   var sql = [
@@ -36,11 +47,15 @@ function getStatus (callback) {
     'GROUP BY status_code'].join(' ');
 
   db.query(sql, function (error, result) {
+    if (error) {
+      console.log(new Date(), 'getStatus error:', error);
+      return callback(error);
+    }
 
     status_valgdag = result.length === 0 ? true :
       result.some(function (row) { return row.status_code === '0' }) ? true : false;
 
-    callback();
+    callback(null, status_valgdag);
   });
 }
 
