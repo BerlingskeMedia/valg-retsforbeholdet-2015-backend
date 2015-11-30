@@ -221,6 +221,7 @@ function objectifyLocation (location) {
 function getPath (areatype, ident) {
   switch(areatype) {
     case 'L': return '/landet';
+    case 'O': return '/landet';
     case 'A': return '/landsdel'.concat('/', ident);
     case 'S': return '/storkreds'.concat('/', ident);
     case 'K': return '/kreds'.concat('/', ident);

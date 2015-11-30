@@ -256,7 +256,7 @@ function cleanName (name) {
 
 function parseStedType (stedType) {
   return stedType === 'HeleLandet' ? 'L' :
-    stedType === 'Optalling' ? 'L' :
+    stedType === 'Optalling' ? 'O' :
     stedType === 'Landsdel' ? 'A' :
     stedType === 'StorKreds' ? 'S' :
     stedType === 'Opstillingskreds' ? 'K' :
@@ -269,6 +269,7 @@ function parseStedType (stedType) {
 function setParent (location, data) {
   data.parent_ident =
     data.areatype === 'L' ? '' :
+    data.areatype === 'O' ? '' :
     data.areatype === 'A' ? location.land_id :
     data.areatype === 'S' ? location.landsdel_id :
     data.areatype === 'K' ? location.storkreds_id :
