@@ -256,6 +256,7 @@ function cleanName (name) {
 
 function parseStedType (stedType) {
   return stedType === 'HeleLandet' ? 'L' :
+    stedType === 'Optalling' ? 'L' :
     stedType === 'Landsdel' ? 'A' :
     stedType === 'StorKreds' ? 'S' :
     stedType === 'Opstillingskreds' ? 'K' :
