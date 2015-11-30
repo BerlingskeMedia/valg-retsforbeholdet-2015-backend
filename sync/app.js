@@ -153,7 +153,7 @@ function insertLocation (location_header, callback) {
     }
 
     // Vi ignorerer status 10 (Fintællingsresultatet foreligger endnu ikke) for alt andet end 
-    if (orgdata.Sted.Type !== 'Afstemningsomraade' && parseInt(orgdata.Status.Kode) === 10) {
+    if (parseInt(orgdata.Status.Kode) === 10 && orgdata.Sted.Type !== 'Afstemningsomraade') {
       console.log('Skipped fintælling for', orgdata.Sted.Id, orgdata.Sted._);
       callback(null);
       return;
