@@ -28,17 +28,17 @@ run();
 
 
 function getStatus (callback) {
+  // Selecting GROUP BY status_code insted of WHERE status_code = "0",
+  // because I need to make sure we're not running on an empty table.
   var sql = [
-    'SELECT ident, status_code, updated_at',
-    'FROM locations'].join(' ');
+    'SELECT COUNT(ident) AS count, status_code',
+    'FROM locations',
+    'GROUP BY status_code'].join(' ');
 
   db.query(sql, function (error, result) {
 
-    status_valgdag =
-      result.length === 0 ||
-      result.some(function (element) {
-        return element.status_code === 0;
-      });
+    status_valgdag = result.length === 0 ? true :
+      result.some(function (row) { return row.status_code === '0' }) ? true : false;
 
     callback();
   });
@@ -146,9 +146,7 @@ function insertLocation (location_header, callback) {
 
     // Eg. http://www.dst.dk/valg/Valg1475796/xml/valgdag_999.xml
     if (orgdata.Sted.Type === 'Optalling' && orgdata.Sted.Id === '') {
-      console.log('Skipped Optalling');
-      callback(null);
-      return;
+      orgdata.Sted.Id = '999';
     }
 
     // HeleLandet har ID=0.
