@@ -53,7 +53,7 @@ function getStatus (callback) {
     }
 
     status_valgdag = result.length === 0 ? true :
-      result.some(function (row) { return row.status_code === '0' }) ? true : false;
+      result.some(function (row) { return row.status_code === 0 }) ? true : false;
 
     callback(null, status_valgdag);
   });
