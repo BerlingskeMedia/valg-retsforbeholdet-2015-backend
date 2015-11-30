@@ -11,8 +11,7 @@ var events = require('events'),
     valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
     // valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
     valg = 'http://91.208.143.70/valgtest/valg1664255/xml/',
-    status_valgdag = false,
-    status_locationstatus = {};
+    status_valgdag = false;
 
 
 function run () {
@@ -40,13 +39,6 @@ function getStatus (callback) {
       result.some(function (element) {
         return element.status_code === 0;
       });
-
-    result.forEach(function (location) {
-      status_locationstatus[location.ident] = {
-        status_code: location.status_code,
-        updated_at: location.updated_at
-      }
-    });
 
     callback();
   });
@@ -79,23 +71,23 @@ function importData (filename, callback) {
 
     getAndInsert(data.Land, function (error, result) {
       if (error) {console.log(error);}
-      console.log(new Date(), 'Lande imported');
+      console.log(new Date(), 'Lande done');
 
       getAndInsert(data.Landsdele, function (error, result) {
         if (error) {console.log(error);}
-        console.log(new Date(), 'Landsdele imported');
+        console.log(new Date(), 'Landsdele done');
 
         getAndInsert(data.Storkredse, function (error, result) {
           if (error) {console.log(error);}
-          console.log(new Date(), 'Storkredse imported');
+          console.log(new Date(), 'Storkredse done');
 
           getAndInsert(data.Opstillingskredse, function (error, result) {
             if (error) {console.log(error);}
-            console.log(new Date(), 'Opstillingskredse imported');
+            console.log(new Date(), 'Opstillingskredse done');
 
             getAndInsert(data.Afstemningsomraader, function (error, result) {
               if (error) {console.log(error);}
-              console.log(new Date(), 'Afstemningsomraader imported');
+              console.log(new Date(), 'Afstemningsomraader done');
               callback();
             });
           });
@@ -120,7 +112,7 @@ function getAndInsert (locations, callback) {
       dst.getData(location.filnavn, insertLocation(location, cb));
     });
   } else {
-    location.filnavn = locations.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
+    locations.filnavn = locations.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
     dst.getData(locations.filnavn, insertLocation(locations, callback));
   }
 
@@ -147,14 +139,14 @@ function insertLocation (location_header, callback) {
 
     // Vi ignorerer status 10 (Fintællingsresultatet foreligger endnu ikke) for alt andet end 
     if (orgdata.Sted.Type !== 'Afstemningsomraade' && parseInt(orgdata.Status.Kode) === 10) {
-      console.log('Skipped fintælling', orgdata.Sted);
+      console.log('Skipped fintælling for', orgdata.Sted.Id, orgdata.Sted._);
       callback(null);
       return;
     }
 
     // Eg. http://www.dst.dk/valg/Valg1475796/xml/valgdag_999.xml
     if (orgdata.Sted.Type === 'Optalling' && orgdata.Sted.Id === '') {
-      console.log('Skipped', orgdata.Sted);
+      console.log('Skipped Optalling');
       callback(null);
       return;
     }
@@ -176,7 +168,7 @@ function insertLocation (location_header, callback) {
         console.log(new Date(), error);
         callback(error);
       } else {
-        console.log('Imported', orgdata.Sted);
+        console.log('Imported:', orgdata.SenestRettet, orgdata.Sted.Id, orgdata.Sted._);
         callback(null, result);
       }
     });
