@@ -9,7 +9,8 @@ var events = require('events'),
     dst = require('./dst_client'),
     // valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1475796',
     valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
-    valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
+    // valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
+    valg = 'http://91.208.143.70/valgtest/valg1664255/xml/',
     status_valgdag = false,
     status_locationstatus = {};
 
@@ -115,9 +116,11 @@ function getAndInsert (locations, callback) {
 
   if (locations instanceof Array) {
     locations.forEach(function (location) {
+      location.filnavn = location.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
       dst.getData(location.filnavn, insertLocation(location, cb));
     });
   } else {
+    location.filnavn = locations.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
     dst.getData(locations.filnavn, insertLocation(locations, callback));
   }
 
@@ -189,30 +192,44 @@ function convertData (data) {
     name: cleanName(data.Sted._),
     type: data.Sted.Type,
     areatype: parseStedType(data.Sted.Type),
-    votes_allowed: parseInt(data.Stemmeberettigede),
-    votes_made: parseInt(data.Stemmer.IAltAfgivneStemmer),
-    votes_pct: parseFloat(data.DeltagelsePct),
-    votes_valid: parseInt(data.Stemmer.IAltGyldigeStemmer),
-    votes_invalid_blank: parseInt(data.Stemmer.BlankeStemmer),
-    votes_invalid_other: parseInt(data.Stemmer.AndreUgyldigeStemmer),
-    votes_invalid_total: parseInt(data.Stemmer.IAltUgyldigeStemmer),
+    votes_allowed: data.Stemmeberettigede ? parseInt(data.Stemmeberettigede) : 0,
+    votes_pct: data.DeltagelsePct ? parseFloat(data.DeltagelsePct) : 0,
     status_code: parseInt(data.Status.Kode),
     status_text: data.Status._,
     updated_at: parseDate(data.SenestRettet),
     created_at: parseDate(data.SenestDannet)
   };
 
-  if (data.Stemmer.Parti) {
-    data.Stemmer.Parti.forEach(function (parti) {
-      if (parti.Bogstav === 'JA') {
-        row.votes_yes = parseInt(parti.StemmerAntal);
-        row.votes_yes_pct = parseFloat(parti.StemmerPct);
-      } else if (parti.Bogstav === 'NEJ') {
-        row.votes_no = parseInt(parti.StemmerAntal);
-        row.votes_no_pct = parseFloat(parti.StemmerPct);
-      }
-    });
+  if (data.Stemmer) {
+    row.votes_made = parseInt(data.Stemmer.IAltAfgivneStemmer);
+    row.votes_valid = parseInt(data.Stemmer.IAltGyldigeStemmer);
+    row.votes_invalid_blank = parseInt(data.Stemmer.BlankeStemmer);
+    row.votes_invalid_other = parseInt(data.Stemmer.AndreUgyldigeStemmer);
+    row.votes_invalid_total = parseInt(data.Stemmer.IAltUgyldigeStemmer);
+
+    if (data.Stemmer.Parti) {
+      data.Stemmer.Parti.forEach(function (parti) {
+        if (parti.Bogstav === 'JA') {
+          row.votes_yes = parseInt(parti.StemmerAntal);
+          row.votes_yes_pct = parseFloat(parti.StemmerPct);
+        } else if (parti.Bogstav === 'NEJ') {
+          row.votes_no = parseInt(parti.StemmerAntal);
+          row.votes_no_pct = parseFloat(parti.StemmerPct);
+        }
+      });
+    }
+  } else {
+    row.votes_made = 0;
+    row.votes_valid = 0;
+    row.votes_invalid_blank = 0;
+    row.votes_invalid_other = 0;
+    row.votes_invalid_total = 0;
+    row.votes_yes = 0;
+    row.votes_yes_pct = 0;
+    row.votes_no = 0;
+    row.votes_no_pct = 0;
   }
+
 
   return row;
 }
