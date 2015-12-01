@@ -11,7 +11,9 @@ module.exports.register = function (server, options, next) {
     method: 'get',
     path: '/landet',
     handler: function (request, reply) {
-      getCountry(cb(reply));
+      getCountry(
+        addSublocations('S',
+          addHierachy(cb(reply))));
     },
     config: {
       cors: true
@@ -60,6 +62,7 @@ module.exports.register.attributes = {
 };
 
 
+module.exports.getCountry = getCountry;
 module.exports.getLocation = getLocation;
 module.exports.queryLocations = queryLocations;
 
@@ -76,13 +79,33 @@ function cb (reply) {
 }
 
 
-function getCountry (callback) {
-  var areatype = 'L',
-      ident = '0';
 
-  getLocation(areatype, ident,
-    addSublocations('S', 
-      addHierachy(callback)));
+function getCountry (callback) {
+  getLocation('L', '0', function (error, heleLandet) {
+    if (error) {
+      return callback(error);
+    }
+
+    if (heleLandet.status_code === 0) {
+      // If HeleLandet is
+      // We're getting the Optalling and disguise it as HeleLandet. 
+      getLocation('O', '999', function (error, optalling) {
+
+        if (optalling.status_code === 0) {
+          callback(null, heleLandet);
+        } else {
+          optalling.ident = "0";
+          optalling.areatype = "L";
+          optalling.name = "Hele landet";
+          optalling.path = "/landet";
+
+          callback(null, optalling);
+        }
+      });
+    } else {
+      callback(null, heleLandet);
+    }
+  });
 }
 
 

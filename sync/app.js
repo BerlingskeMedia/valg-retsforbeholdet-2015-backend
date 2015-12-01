@@ -7,10 +7,9 @@ var events = require('events'),
     one_minute = 1000 * 60,
     db = require('../api/db'),
     dst = require('./dst_client'),
-    // valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1475796',
+    test = process.env.TEST ? true : false,
     valg_id = process.env.VALG_ID ? process.env.VALG_ID : '1664255',
-    // valg = 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
-    valg = 'http://91.208.143.70/valgtest/valg1664255/xml/',
+    valg = test ? 'http://91.208.143.70/valgtest/'.concat('Valg', valg_id, '/xml/') : 'http://www.dst.dk/valg/'.concat('Valg', valg_id, '/xml/'),
     first_run = true;
 
 
@@ -123,11 +122,15 @@ function getAndInsert (locations, callback) {
 
   if (locations instanceof Array) {
     locations.forEach(function (location) {
-      location.filnavn = location.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
+      if (test) {
+        location.filnavn = location.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
+      }
       dst.getData(location.filnavn, insertLocation(location, cb));
     });
   } else {
-    locations.filnavn = locations.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
+    if (test) {
+      locations.filnavn = locations.filnavn.replace('www.dst.dk/valg/', '91.208.143.70/valgtest/');
+    }
     dst.getData(locations.filnavn, insertLocation(locations, callback));
   }
 
@@ -152,9 +155,9 @@ function insertLocation (location_header, callback) {
       return;
     }
 
-    // Vi ignorerer status 10 (Fintællingsresultatet foreligger endnu ikke) for alt andet end 
-    if (parseInt(orgdata.Status.Kode) === 10 && orgdata.Sted.Type !== 'Afstemningsomraade') {
-      console.log('Skipped fintælling for', orgdata.Sted.Id, orgdata.Sted._);
+    // For alt andet end Afstemningsomraader, ønsker vi kun status 0, 1 og 12.
+    if (orgdata.Sted.Type !== 'Afstemningsomraade' && ['0','1','12'].indexOf(orgdata.Status.Kode) === -1) {
+      console.log('Skipped', orgdata.Status.Kode, orgdata.Sted.Type, orgdata.Sted.Id, orgdata.Sted._);
       callback(null);
       return;
     }

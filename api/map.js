@@ -84,31 +84,6 @@ function getLatestCompletedConstituencies (ident, callback) {
 }
 
 
-function getCountry (callback) {
-  tables.getLocation('L', '0', function (error, heleLandet) {
-    if (error) {
-      return callback(error);
-    }
-
-    if (heleLandet.status_code === 0) {
-      // If HeleLandet is
-      // We're getting the Optalling and disguise it as HeleLandet. 
-      tables.getLocation('O', '999', function (error, optalling) {
-
-        optalling.ident = "0";
-        optalling.areatype = "L";
-        optalling.name = "Hele landet";
-        optalling.path = "/landet";
-
-        callback(null, optalling);
-      });
-    } else {
-      callback(null, heleLandet);
-    }
-  });
-}
-
-
 function getMapData (request, reply) {
 
   // var ee = new eventEmitter();
@@ -121,7 +96,7 @@ function getMapData (request, reply) {
   //   console.log('removeListener')
   // });
 
-  getCountry(function (err, data) {
+  tables.getCountry(function (err, data) {
     if (err) return reply().code(500);
     if (data === null) return reply();
 
@@ -148,7 +123,7 @@ function getMapData (request, reply) {
 
 
 function getTeaserData (request, reply) {
-  getCountry(function (err, data) {
+  tables.getCountry(function (err, data) {
     if (err) return reply().code(500);
 
     reply(data);
