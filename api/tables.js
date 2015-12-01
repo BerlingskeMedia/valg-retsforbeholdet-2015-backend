@@ -86,14 +86,16 @@ function getCountry (callback) {
       return callback(error);
     }
 
+    // If HeleLandet is still waiting on the results...
     if (heleLandet.status_code === 0) {
-      // If HeleLandet is
-      // We're getting the Optalling and disguise it as HeleLandet. 
+      // ...we get the Optalling.
       getLocation('O', '999', function (error, optalling) {
 
+        // OK, if Optalling is also waiting on results, we might as well return HeleLandet
         if (optalling.status_code === 0) {
           callback(null, heleLandet);
         } else {
+          // We're returning Optalling disguises as HeleLandet.
           optalling.ident = "0";
           optalling.areatype = "L";
           optalling.name = "Hele landet";
