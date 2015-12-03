@@ -86,13 +86,15 @@ function getCountry (callback) {
       return callback(error);
     }
 
+    if (heleLandet === null) {
+      callback(null, {});
     // If HeleLandet is still waiting on the results...
-    if (heleLandet.status_code === 0) {
+    } else if (heleLandet.status_code === 0) {
       // ...we get the Optalling.
       getLocation('O', '999', function (error, optalling) {
 
         // OK, if Optalling is also waiting on results, we might as well return HeleLandet
-        if (optalling.status_code === 0) {
+        if (optalling === null || optalling.status_code === 0) {
           callback(null, heleLandet);
         } else {
           // We're returning Optalling disguises as HeleLandet.
@@ -377,7 +379,7 @@ function addHierachy (callback) {
       'LEFT JOIN locations AS greater ON greater.areatype = "S" AND greater.ident = const.parent_ident',
       'WHERE const.areatype = "K"',
       'AND const.ident = ' + db.escape(location.parent_ident)].join(' ');
-    
+
       db.queryOne(sql, buildhierarchy(location));
     }
   };
